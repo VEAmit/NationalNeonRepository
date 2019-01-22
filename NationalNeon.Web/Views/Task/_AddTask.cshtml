@@ -1,0 +1,110 @@
+@model NationalNeon.Domain.Task.TaskModel
+<style>
+    .has-error {
+        color: red;
+        display: none;
+    }
+</style>
+@*<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>*@
+
+<div class="modal-content">
+    <div class="modal-header modal-popup-header">
+        <button type="button" class="close" data-dismiss="modal" id="closePop">&times;</button>
+        <h1 class="modal-title">New Task</h1>
+    </div>
+    <div class="modal-body">
+        <form class="smart-form" asp-action="AddTask" asp-controller="Task" id="addUpdateForm">
+
+            <section>
+                <div class="form-group">
+                    <label class="control-label">Job</label>
+                    @Html.DropDownListFor(m => m.jobId, (SelectList)ViewBag.jobList, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                    <span class="has-error" id="invalid_JobName">Please Select Job Name</span>
+                </div>
+            </section>
+
+            <section>
+                <div class="form-group">
+                    <label class="control-label">Department</label>
+                    @*@Html.DropDownList("")*@
+                    @*@Html.DropDownListFor()*@
+                    @Html.DropDownListFor(m => m.departmentId, (SelectList)ViewBag.departmentList, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                    <span class="has-error" id="invalid_DepartmentName">Please Select Department Name</span>
+                </div>
+
+            </section>
+            <section>
+                <div class="form-group">
+                    <label class="control-label">Users</label>
+                    @*@Html.DropDownList("")*@
+                    @*@Html.DropDownListFor()*@
+                    @Html.DropDownListFor(m => m.userId, (SelectList)ViewBag.usersList, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                    <span class="has-error" id="invalid_UserName">Please Select User Name</span>
+                </div>
+
+            </section>
+            <section class="form-group">
+                <label class="control-label">Task Name</label>
+                <input asp-for="TaskName" type="text" class="form-control" autocomplete="off" onchange="$(this).parent().find('.has-error').hide();" />
+                @*<span asp-validation-for="TaskName" class="text-danger"></span>*@
+                <span class="has-error" id="invalid_TaskName">Please enter Task Name</span>
+            </section>
+
+            <section class="form-group">
+                <label class="control-label">Budgeted Hours</label>
+                <input asp-for="BudgetedHours" type="number" step="1" min="0" class="form-control" autocomplete="off" />
+                @*<span class="has-error" id="invalid_BudgetedHours">Please enter Budgeted Hours</span>*@
+                @*<span asp-validation-for="BudgetedHours" class="text-danger"></span>*@
+            </section>
+
+            <section class="form-group">
+                <label class="control-label">Target Completion Date</label>
+                <input asp-for="TargetCompletionDate" type="text" data-provide="datepicker" class="form-control dateCalender" onkeypress="return false;" onchange="$(this).parent().find('.has-error').hide()" autocomplete="off" />
+                @*onchange="$(this).parent().find('.has-error').hide()"*@
+                <span class="has-error" id="invalid_TargetCompletionDate">Please enter Target Completion Date</span>
+                @*<span asp-validation-for="TargetCompletionDate" class="text-danger"></span>*@
+            </section>
+
+            <section class="form-group">
+                <label class="control-label">Employee</label>
+                <input asp-for="Employee" type="text" class="form-control" autocomplete="off" />
+                <span class="has-error" id="invalid_Employee">Please enter employee</span>
+                @*<span asp-validation-for="Employee" class="text-danger"></span>*@
+            </section>
+
+            <section class="form-group">
+                <label class="control-label">Status</label>
+                <input type="text" asp-for="Status" class="form-control" autocomplete="off" />
+                <span class="has-error" id="invalid_Status">Please enter status</span>
+                @*<span asp-validation-for="Status" class="text-danger"></span>*@
+            </section>
+
+            <input type="hidden" asp-for="TaskId" />
+
+            <footer class="text-center form-submit"><button type="button" class="btn btn-danger form-submit-btn btn_addUpdateTask">Submit</button></footer>
+            @*onclick="return settargetCompleteDate();"*@
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+
+        $('.dateCalender').datepicker({
+            autoclose: true,
+            dateFormat: 'mm/dd/yy'
+
+        }).on("change", function () {
+            $(this).attr('value', this.value);
+        });
+        
+    });
+    
+    function drp(obj) {
+        if (obj.parentNode.children[2] != undefined) {
+            obj.parentNode.children[2].remove();
+        }
+    }
+
+</script>
+

@@ -1,0 +1,728 @@
+
+<span id="updating-chart" class="chart-large txt-color-blue noprint" style="display:none;"></span>
+
+
+<div class="row mb-2 noprint">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+        <button onclick="window.history.back();" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Back</button>
+        <button id="refreshdashboard" class="btn btn-danger"><i class="fa fa-repeat"></i> Refresh</button>
+        @*<div class="widget-body quick-action-minheight">*@
+            <div class="btn-group btn-group-md">
+                <button class="btn btn-success">New</button>
+                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#" class="selectAction" data-toggle="modal" data-target="#myModal" action="newJob">Job</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newTask" id="newTask">Task</a>
+                    </li>
+
+                    <li class="divider"></li>
+                    <li>
+                        <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newUser">User</a>
+                    </li>
+
+                </ul>
+            </div>
+        @*</div>*@
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+        <button id="print" onclick="window.print()" class="btn btn-danger export-data"><i class="fa fa-print"></i> Print</button>
+        @*<button class="btn btn-danger"><i class="fa fa-refresh"></i> Reset Widgets</button>*@
+        <span id="refresh" class="btn btn-danger" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true" data-reset-msg="Would you like to RESET all your saved widgets and clear LocalStorage?"><i class="fa fa-refresh"> Reset Widgets</i></span>
+
+    </div>
+</div>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- end row -->
+    <!-- row -->
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12 noprint">
+            <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <!-- new widget -->
+                    <div class="jarviswidget jarviswidget-sortable" id="wid-id-3" data-widget-editbutton="false" data-widget-deletebutton="false">
+                        <header>
+                            <span class="widget-icon"> <i class="fa fa-clock-o"></i> </span>
+                            <h2>Jobs Target Completion </h2>
+                        </header>
+                        <!-- widget div-->
+                        <!-- widget div-->
+                        <div class="padding0">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Jobs</th>
+                                            <th>Target</th>
+                                            <th>Completion</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{var job_number = 0;
+                                            @foreach (var item in ViewBag.jobs)
+                                            {
+                                                <tr>
+                                                    <td><strong>@(++job_number)</strong></td>
+                                                    <td>@item.job_name</td>
+                                                    <td>@item.target_completion_date.ToString("D")</td>
+                                                </tr>
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- end widget div -->
+                        <!-- end widget div -->
+                    </div>
+                    <!-- end widget -->
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-6">
+                    <!-- new widget -->
+                    <div class="row">
+                        <div class="jarviswidget jarviswidget-sortable" id="wid-id-4" data-widget-editbutton="false" data-widget-deletebutton="false">
+                            <header>
+                                <span class="widget-icon"> <i class="fa fa-clock-o"></i> </span>
+                                <h2>Upcoming Scheduled Tasks</h2>
+                            </header>
+                            <!-- widget div-->
+                            <div class="padding0">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Jobs</th>
+                                                <th>Target</th>
+                                                <th>Completion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{var jobnumber = 0;
+                                                @foreach (var item in ViewBag.scheduledjobs)
+                                                {
+                                                    <tr>
+                                                        <td><strong>@(++jobnumber)</strong></td>
+                                                        <td>@item.job_name</td>
+                                                        <td>@item.scheduled_date.ToString("D")</td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- end widget div -->
+                        </div>
+                        <!-- end widget -->
+                    </div>
+                </div>
+            </div>
+        </article>
+
+    </div>
+    <!-- row -->
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12 noprint">
+            @*<div class="row">*@
+            <div class="jarviswidget" id="wid-id-2" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon noprint"> <i class="fa fa-clock-o"></i> </span>
+                    <h2>Production Workload By Department</h2>
+                </header>
+                <div>
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <div class="no-padding">
+                            <div class="widget-body">
+                                <!-- widget div-->
+                                <div id="normal-bar-graph" class="chart no-padding"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-6 noprint">
+                        <div class="widget-body no-padding smart-form">
+                            <!-- content goes here -->
+                            <h6 class="todo-group-title"><i class="fa fa-warning"></i><strong> Summary</strong></h6>
+                            <ul class="summary-list">
+                                @foreach (var item in ViewBag.data)
+                                {
+                                    if (item.VisibleOnDashboard)
+                                    {
+                                    <li><p> <strong>@item.departmentname</strong>  <span class="text-muted">@item.InCompleteHours</span></p></li>
+                                    }
+                                }
+                            </ul>
+                            <!-- end content -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- widget div-->
+                <!-- end widget div -->
+            </div>
+            @*</div>*@
+        </article>
+        @*<article class="col-sm-12 col-md-12 col-lg-6 noprint"></article>*@
+    </div>
+    <!-- end row -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-body" id="divAddPopup">
+                <!-- Modal content-->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- row -->
+    <div class="row noprint">
+        <article class="col-sm-12 col-md-12 col-lg-6">
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-5" data-widget-editbutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-calendar"></i> </span>
+                    @*<h2>Production Calendar</h2>*@
+                    <h2>Job Schedule</h2>
+                    <div class="widget-toolbar">
+                        <!-- add: non-hidden - to disable auto hide -->
+                        <div class="btn-group">
+                            <button class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown">
+                                Showing <i class="fa fa-caret-down"></i>
+                            </button>
+                            <ul class="dropdown-menu js-status-update pull-right">
+                                <li>
+                                    <a href="javascript:void(0);" id="mt">Month</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" id="ag">Agenda</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" id="td">Today</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </header>
+                <!-- widget div-->
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <input class="form-control" type="text">
+                    </div>
+                    <!-- end widget edit box -->
+                    <div class="widget-body no-padding">
+                        <!-- content goes here -->
+                        <div class="widget-body-toolbar">
+                            
+                            <div id="calendar-buttons">
+                                <div class="btn-group">
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                    <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="calendar"></div>
+                        <!-- end content -->
+                    </div>
+                </div>
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+        </article>
+
+        <article class="col-sm-12 col-md-12 col-lg-6 sortable-grid ui-sortable">
+            <!-- new widget -->
+            <div class="jarviswidget jarviswidget-color-blue jarviswidget-sortable" id="wid-id-6" data-widget-editbutton="false" data-widget-colorbutton="false" role="widget">
+                <header role="heading" class="ui-sortable-handle">
+                    <div class="jarviswidget-ctrls" role="menu">
+
+                        <a href="javascript:void(0);" class="button-icon jarviswidget-toggle-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Collapse"><i class="fa fa-minus "></i></a>
+                        <a href="javascript:void(0);" class="button-icon jarviswidget-fullscreen-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Fullscreen"><i class="fa fa-expand "></i></a>
+                        @*<a href="javascript:void(0);" class="button-icon jarviswidget-delete-btn" rel="tooltip" title="" data-placement="bottom" data-original-title="Delete"><i class="fa fa-times"></i></a>*@
+                    </div>
+                    <span class="widget-icon"> <i class="fa fa-check txt-color-white"></i> </span>
+                    <h2>Message Center / To Do List</h2>
+                    <!-- <div class="widget-toolbar">
+                    add: non-hidden - to disable auto hide
+
+                    </div>-->
+                    <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+                </header>
+                <!-- widget div-->
+                <div role="content">
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <div>
+                            <label>Title:</label>
+                            <input type="text">
+                        </div>
+                    </div>
+                    <!-- end widget edit box -->
+
+                    <div class="widget-body no-padding smart-form">
+                        <!-- content goes here -->
+                        <h5 class="todo-group-title" style="color:black"><i class="fa fa-warning"></i> Assigned Tasks</h5>
+                        <ul id="sortable1" class="todo ui-sortable">
+                            <li>
+                                @*<span class="handle ui-sortable-handle">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="checkbox-inline">
+                                            <i></i>
+                                        </label>
+                                    </span>*@
+                                <p>
+                                    @*Coming Soon This Feature...*@
+                                    @*<strong>Ticket #17643</strong> - Hotfix for WebApp interface issue [<a href="javascript:void(0);" class="font-xs">More Details</a>] <span class="text-muted">Sea deep blessed bearing under darkness from God air living isn't. </span>
+                                        <span class="date">Jan 1, 2014</span>*@
+                                    <div class="padding0">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sno</th>
+                                                        <th>Task Name</th>
+                                                        <th>Budget Hours</th>
+                                                        <th>Completion Date</th>
+                                                        <th>Completed</th>
+                                                        @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
+                                                        {
+                                                            <th>Employee</th>
+                                                        }
+
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @{
+                                                        var task_number = 0;
+                                                        @foreach (var task in ViewBag.assignedTasks)
+                                                        {
+                                                            <tr>
+                                                                <td>@(++task_number)</td>
+                                                                <td>@task.TaskName</td>
+                                                                <td>@task.BudgetedHours</td>
+                                                                <td>@task.TargetCompletionDate.ToString("D")</td>
+                                                                @if (task.Completed == 0)
+                                                                {
+                                                                    <td>No</td>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <td>Yes</td>
+                                                                }
+                                                                @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
+                                                                {
+                                                                    <td>@task.Employee</td>
+                                                                }
+
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <h2 class="todo-group-title" style="color:black"><i class="fa fa-exclamation"></i> Incomplete Tasks </h2>
+                    <ul id="sortable2" class="todo ui-sortable">
+
+                        @foreach (var item in ViewBag.incompleteTask)
+                        {
+                            <li>
+
+                                <span class="handle ui-sortable-handle">
+                                    <label class="checkbox">
+                                        <input type="checkbox" name="checkbox-inline" onclick="completetask(@item.TaskId)">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>@item.TaskName</strong>
+                                </p>
+                            </li>
+                        }
+
+
+                    </ul>
+
+                    <h5 class="todo-group-title" style="color:black"><i class="fa fa-check"></i> Completed Tasks</h5>
+                    <ul id="sortable3" class="todo">
+                        @if (ViewBag.completeTask != null)
+                        {
+
+                            @foreach (var item in ViewBag.completeTask)
+                            {
+                                <li class="complete">
+                                    <span class="handle">
+                                        <label class="checkbox state-disabled" style="display:none">
+                                            <input type="checkbox" name="checkbox-inline" checked="checked" disabled="disabled">
+                                            <i></i>
+                                        </label>
+                                    </span>
+                                    <p>
+                                        <strong>@item.TaskName</strong>
+                                        @*<strong>Ticket #17643</strong> - Hotfix for WebApp interface issue [<a href="javascript:void(0);" class="font-xs">More Details</a>] <span class="text-muted">Sea deep blessed bearing under darkness from God air living isn't. </span>
+                                            <span class="date">Jan 1, 2014</span>*@
+                                    </p>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <!-- end content -->
+                </div>
+
+            </div>
+            <!-- end widget div -->
+        </article>
+    </div>
+    <!-- end widget -->
+    <!-- end row -->
+</section>
+<!-- end widget grid -->
+@*<style>
+            @media print{
+                header,nav,aside,hr,.btn-group,#ribbon{
+                display: none;
+                }
+    </style>*@
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.selectAction').click(function () {
+            var curEvent = $(this);
+
+            const actionType = curEvent.attr('action');
+
+            switch (actionType) {
+                case "newJob": getAddJobView();
+                    break;
+                case "newTask": getAddTaskView();
+                    break;
+                case "newDepartment": getAddDepartmentView();
+                    break;
+                case "newUser": getAddUserView();
+                    break;
+            }
+        });
+
+        // getuserDetail();
+
+        /* Here Task Pop Up Page Open and Save the data     */
+
+        function getAddTaskView() {
+            $.ajax({
+                url: "/Task/AddTask",
+                type: "GET",
+                async: false,
+                success: function (result) {
+                    $("#divAddPopup").html('');
+                    $("#divAddPopup").html(result);
+                }
+            });
+        }
+
+        $('#divAddPopup').delegate('.btn_addUpdateTask', 'click', function () {
+            var curEvent = $(this);
+            let isValid = true;
+            var formValue = $("#addUpdateForm").serialize();
+            if (formValue !== undefined) {
+                if ($('select[name="jobId"]').val() == '' || $('select[name="jobId"]').val() == undefined) {
+                    $("#invalid_JobName").show();
+                    isValid = false;
+                }
+                if ($('select[name="departmentId"]').val() == '' || $('select[name="departmentId"]').val() == undefined) {
+                    $("#invalid_DepartmentName").show();
+                    isValid = false;
+                }
+                if ($('input[name="TaskName"]').val() == '' || $('input[name="TaskName"]').val() == undefined) {
+                    $("#invalid_TaskName").show();
+                    isValid = false;
+                }
+                if ($('input[name="TargetCompletionDate"]').val() == '' || $('input[name="TargetCompletionDate"]').val() == undefined) {
+                    $("#invalid_TargetCompletionDate").show();
+                    isValid = false;
+                }
+                //----------------
+                if ($('select[name="userId"]').val() == '' || $('select[name="userId"]').val() == undefined) {
+                    $("#invalid_UserName").show();
+                    isValid = false;
+                }
+                if ($('input[name="Status"]').val() == '' || $('input[name="Status"]').val() == undefined) {
+                    $("#invalid_Status").show();
+                    isValid = false;
+                }
+            }
+            if (isValid) {
+                $('#divAddPopup [id^="invalid_"]').hide();
+                if (setTaskJobDates()) {
+                    formValue = $("#addUpdateForm").serialize();
+                    saveOrUpdate(formValue);
+                }
+            }
+            // saveOrUpdate(formValue);
+        });
+
+        function saveOrUpdate(formValue) {
+            $.ajax({
+                type: 'POST',
+                url: "/Task/AddTask",
+                async: false,
+                data: formValue,
+                success: function (result) {
+                    if (result.success) {
+                        $('#closePop').click();
+                        $.notify({
+                            title: result.title,
+                            message: result.message,
+                        },
+                            {
+                                type: result.type,
+                                allow_dismiss: false,
+                                showProgressbar: true,
+                                delay: '100',
+                                newest_on_top: true,
+                            });
+                    }
+                    setTimeout(() => {
+                        //window.location.reload();
+                        history.go(0)
+                    }, 2000)
+                }
+            });
+        }
+
+
+        $("#newTask").click(function () {
+            $('#addUpdateForm').find("input[type=text], textarea, select, number").val("");
+
+        });
+        /* End Tasks Pop Up Page Save the data     */
+
+
+    });
+
+
+    /* Here Jobs Pop Up Page Open and Save the data     */
+    function getAddJobView() {
+        $.ajax({
+            url: "/Jobs/AddJobs",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddPopup").html('');
+                $("#divAddPopup").html(result);
+            }
+        });
+    }
+
+    $('#divAddPopup').delegate('.btn_addUpdateJobs', 'click', function () {
+
+        var curEvent = $(this);
+        //var formValue = $("#addUpdateJobForm").serialize();
+        let isValid = true;
+        var formValue = $("#addUpdateJobForm").serialize();
+        if (formValue !== undefined) {
+            if ($('input[name="job_number"]').val() == '' || $('input[name="job_number"]').val() == undefined) {
+                $("#invalid_Job").show();
+                isValid = false;
+            }
+            if ($('input[name="job_name"]').val() == '' || $('input[name="job_name"]').val() == undefined) {
+                $("#invalid_JobName").show();
+                isValid = false;
+            }
+
+            if ($('input[name="target_completion_date"]').val() == '' || $('input[name="target_completion_date"]').val() == undefined) {
+                $("#invalid_target_completion_date").show();
+                isValid = false;
+            }
+
+        }
+
+        if (isValid) {
+            $('#divAddPopup [id^="invalid_"]').hide();
+            if (setJobDates()) {
+                formValue = $("#addUpdateJobForm").serialize();
+                saveOrUpdatejob(formValue);
+            }
+        }
+    });
+
+
+    function saveOrUpdatejob(formValue) {
+        $.ajax({
+            type: 'POST',
+            url: "/Jobs/AddJobs",
+            async: false,
+            data: formValue,
+            success: function (result) {
+                if (result.success) {
+                    $('#closePop').click();
+                    $.notify({
+                        title: result.title,
+                        message: result.message,
+                    },
+                        {
+                            type: result.type,
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+                setTimeout(() => {
+                    //window.location.reload();
+                    history.go(0)
+                }, 2000)
+            }
+        });
+
+    }
+
+    /* End Jobs Pop Up Page Save the data     */
+
+    function getAddDepartmentView() {
+        $.ajax({
+            url: "/Department/AddDepartment",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddPopup").html('');
+                $("#divAddPopup").html(result);
+            }
+        });
+    }
+
+    function getAddUserView() {
+        $.ajax({
+            url: "/Users/AddUsers",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddPopup").html('');
+                $("#divAddPopup").html(result);
+            }
+        });
+    }
+
+    $("#divAddPopup").delegate('.add_newUser_btn', 'click', function () {
+        let isValid = true;
+        var form = $('#addNewUserForm').serialize();
+        if (form !== undefined) {
+            if ($('input[name="username"]').val() == '' || $('input[name="username"]').val() == undefined) {
+                $("#invalid_username").show();
+                isValid = false;
+            }
+            if ($('input[name="password"]').val() == '' || $('input[name="password"]').val() == undefined) {
+                $("#invalid_password").show();
+                isValid = false;
+
+            }
+            if ($('select[name="role"]').val() == '' || $('select[name="role"]').val() == undefined) {
+                $("#invalid_role").show();
+                isValid = false;
+                return;
+            }
+
+        }
+        $.ajax({
+            url: "/Users/AddUsers",
+            type: "POST",
+            async: false,
+            data: form,
+            success: function (result) {
+                if (result.success) {
+
+                    $('.close').click();
+                    $.notify({
+                        title: "<strong>Success:</strong> ",
+                        message: "Users Addeded Succesfully",
+                    },
+                        {
+                            type: 'success',
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+                setTimeout(() => {
+                }, 2000);
+            }
+        });
+    });
+
+
+    function completetask(TaskId) {
+
+        $.ajax({
+            type: 'POST',
+            url: "/Home/updateCompleteTask?TaskId=" + TaskId + "",
+            async: false,
+            success: function (result) {
+                if (result.success) {
+                }
+            }
+        });
+    }
+
+    $("#refreshdashboard").click(function () {
+        history.go(0);
+    });
+
+    function setTaskJobDates() {
+        var targetCompleteDate = $("#TargetCompletionDate").val();
+        if (targetCompleteDate != null && targetCompleteDate != undefined && targetCompleteDate != "") {
+            var dateParameters = targetCompleteDate.split('/');
+            var month = dateParameters[0];
+            var day = dateParameters[1];
+            var year = dateParameters[2];
+            $("#TargetCompletionDate").val(year + "-" + month + "-" + day);
+            $("#TargetCompletionDate").attr('value', year + "-" + month + "-" + day);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    function setJobDates() {
+
+        var targetCompleteDate = $("#target_completion_date").val();
+        var scheduledDate = $("#scheduled_date").val();
+        var isValid = false;
+        if (targetCompleteDate != "" && targetCompleteDate != undefined) {
+            var targetDateParameters = targetCompleteDate.split('/');
+            var targetDatemonth = targetDateParameters[0];
+            var targetDateday = targetDateParameters[1];
+            var targetDateyear = targetDateParameters[2];
+            $("#target_completion_date").val(targetDateyear + "-" + targetDatemonth + "-" + targetDateday);
+            $("#target_completion_date").attr('value', targetDateyear + "-" + targetDatemonth + "-" + targetDateday);
+            isValid = true;
+        }
+
+        if (scheduledDate != "" && scheduledDate != undefined) {
+
+            var scheduledDateParameters = scheduledDate.split('/');
+            var scheduledDatemonth = scheduledDateParameters[0];
+            var scheduledDateday = scheduledDateParameters[1];
+            var scheduledDateyear = scheduledDateParameters[2];
+            $("#scheduled_date").val(scheduledDateyear + "-" + scheduledDatemonth + "-" + scheduledDateday);
+            $("#scheduled_date").attr('value', scheduledDateyear + "-" + scheduledDatemonth + "-" + scheduledDateday);
+
+        }
+
+        return isValid;
+    }
+</script>

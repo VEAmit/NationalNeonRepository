@@ -1,0 +1,605 @@
+@model NationalNeon.Domain.Job.JobModel
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noprint form-group">
+        <button onclick="window.history.back();" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Back</button>
+        <button id="refreshTask" class="btn btn-danger export-data"><i class="fa fa-repeat"></i> Refresh</button>
+        @*<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#myJobDetailTaskModal" id="btnAddTask">New Task</button>*@
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Job # :</label>
+        <label class="col-xs-7">@Model.job_number</label>
+        <input type="hidden" value="@Model.jobId" id="hdnJobId" />
+    </div>
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Job Description:</label>
+        <label class="col-xs-7">@Model.description</label>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Job Name:</label>
+        <label class="col-xs-7">@Model.job_name</label>
+
+    </div>
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Target Completion Date:</label>
+        @{
+            var targetDate = "";
+            if (Model.target_completion_date.ToString("MM/dd/yyyy") != "01-01-0001")
+            {
+                targetDate = Model.target_completion_date.ToString("D");
+            }
+            else
+            {
+                targetDate = "Date not set";
+            }
+            <label class="col-xs-7">@targetDate</label>
+        }
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Revenue:</label>
+        <label class="col-xs-7">@Model.revenue</label>
+    </div>
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Scheduled Date:</label>
+        @{
+            var scheduledDate = "";
+            if (Model.scheduled_date.ToString("MM/dd/yyyy") != "01-01-0001")
+            {
+                scheduledDate = Model.scheduled_date.ToString("D");
+            }
+            else
+            {
+                scheduledDate = "Date not set";
+            }
+
+            <label class="col-xs-7">@scheduledDate</label>
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Progress:</label>
+        <div class="progress col-xs-7" >
+            <div class="progress-bar" role="progressbar"
+                 aria-valuemin="0" aria-valuemax="100" style="width:@ViewBag.progress">
+                @ViewBag.progress
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Sales Person:</label>
+        <label class="col-xs-7">@Model.sales_person</label>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Project Documents:</label>
+        @{
+            if (Model.JobFileUpload != null)
+            {
+                <div class="col-xs-7">
+                    <ul id="fileUploadDetailList">
+                        @{
+                            foreach (var fileUpload in Model.JobFileUpload)
+                            {
+                                var filename = (fileUpload.FilePath.Split('\\')[2]).Split('_')[0];
+                                <li>
+                                    <a href="@fileUpload.FilePath" target="_blank">@filename</a>
+                                    <button type="button" class="closebtn" data-toggle="modal" data-target="#fileDeleteDialog" onclick="setJobFileDeleteId(@fileUpload.JobFileUploadId)">x</button>
+                                </li>
+                            }
+                        }
+                    </ul>
+                    <button data-toggle="modal" data-target="#uploadJobDetailFile" onclick="UploadFileJobs(@Model.jobId)">
+                        <i class="fa fa-upload" aria-hidden="true">Upload New</i>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <label class="col-xs-5"></label>
+            }
+        }
+
+    </div>
+    <div class="col-xs-4">
+        <label class="col-xs-5" style="font-weight:600">Status</label>
+        <label class="col-xs-7">@Model.status</label>
+    </div>
+</div>
+<div>
+    @*Project Documents:*@
+    <form asp-controller="Jobs" asp-action="UploadFiles" asp-antiforgery="false"
+          class="dropzone" method="POST" id="uploadWidget" asp-route-jobId="@Model.jobId">
+        <div class="fallback">
+            <input name="file" type="file" multiple />
+            <input type="submit" value="Upload"  />
+        </div>
+    </form>
+ </div>
+<br />
+<br />
+<div class="row">
+    <div class="col-xs-12">
+        <section id="widget-grid" class="">
+            <div class="row">
+                <div class="taskList">
+                    <article class="ol-xs-12 col-sm-12 col-md-12 col-lg-12 actions sortable-grid ui-sortable">
+                        <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false">
+                            <header><span class="widget-icon"> <i class="fa fa-briefcase"></i> </span><h2>Tasks</h2></header>
+                            <div>
+                                <div class="jarviswidget-editbox">
+
+                                </div>
+                                <div class="widget-body no-padding">
+                                    <div class="table-responsive">
+                                        <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Task #</th>
+                                                    <th>Task Name</th>
+                                                    <th>Budgeted Hours</th>
+                                                    <th>Department</th>
+                                                    <th>Status</th>
+                                                    <th>Completed</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    if (Model.Tasks.Count > 0)
+                                                    {
+                                                        var sno = 1;
+                                                        foreach (var task in Model.Tasks)
+                                                        {
+                                                            <tr>
+                                                                <td>@(sno++)</td>
+                                                                <td>@task.TaskName</td>
+                                                                <td>@task.BudgetedHours</td>
+                                                                <td>@task.Department.departmentname</td>
+                                                                <td>@task.Status</td>
+                                                                @{
+                                                                    if (task.Completed == 1)
+                                                                    {
+                                                                        <td>
+                                                                            <i class="fa fa-fw fa-check" title="Completed Task"></i>
+
+                                                                        </td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>
+                                                                            <input type="checkbox" id='@("chk"+task.TaskId)' value="@task.TaskId" onchange="confirmTaskCompletion(@task.TaskId,event)" />
+                                                                            <button id="btnTaskComplete" style="display:none" data-target="#taskCompleteDialog" data-toggle="modal"></button>
+                                                                        </td>
+                                                                    }
+                                                                }
+
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="row">
+        <div class="modal fade" id="myJobDetailTaskModal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-body" id="divAddTaskPopup">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="uploadJobDetailFile" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  modal-popup-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h1 class="modal-title">Upload File</h1>
+            </div>
+            <div class="modal-body">
+                <label>Attach file to job</label>
+                <input class="form-control" id="jobDetailFile" name="jobFile" type="file" />
+                <span class="has-error" id="invalid_JobDetailFileLength">Please select a file</span>
+            </div>
+            <div class="modal-footer">
+                <button onclick="UploadFileSave()" class="btn btn-danger form-submit-btn" style="background:#3276b1; border-color:#3276b1">Upload File</button>
+
+                <button data-dismiss="modal" class="btn btn-danger form-submit-btn">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade noprint" id="fileDeleteDialog" role="dialog">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content">
+            <div class="modal-header modal-popup-header">
+                <button type="button" class="close" data-dismiss="modal" id="btn_closeConfirm">&times;</button>
+                <h1 class="modal-title">Delete File</h1>
+            </div>
+            <div class="modal-body text-center">
+                <h5>Are you sure you want to delete this file ?</h5>
+                <button onclick="deleteJobFile()" class="btn btn-danger form-submit-btn" style="background:#3276b1; border-color:#3276b1">Yes</button>
+                <button data-dismiss="modal" class="btn btn-danger form-submit-btn">No</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<div class="modal fade noprint" id="taskCompleteDialog" role="dialog">
+    <div class="modal-dialog" style="width: 320px;">
+        <div class="modal-content">
+            <div class="modal-header modal-popup-header">
+                <button type="button" class="close" data-dismiss="modal" id="btn_closeConfirm">&times;</button>
+                <h1 class="modal-title">Complete Task</h1>
+            </div>
+            <div class="modal-body text-center">
+                <h5>Are you sure you want to mark this task as complete ?</h5>
+                <button onclick="completeTask()" class="btn btn-danger form-submit-btn" style="background:#3276b1; border-color:#3276b1">Yes</button>
+                <button onclick="removeTaskCheckboxMark()" data-dismiss="modal" class="btn btn-danger form-submit-btn">No</button>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript">
+    var jobId = 0, fileIds = [], loadData = false;
+    $(document).ready(function () {
+       $("#refreshTask").click(function () {
+            history.go(0);
+        });
+        $("#invalid_JobDetailFileLength").hide();
+        $("#btnAddTask").click(function () {
+
+            $('#addUpdateForm').find("input, textarea, select#departmentId,select#userId, number").val("");
+        });
+        $.ajax({
+            url: "/Task/AddTask",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddTaskPopup").html(result);
+                var jobid = $("input[type='hidden'][id='hdnJobId']").val();
+                $("select#jobId").val(jobid);
+                $("select#jobId").prop("disabled", true);
+            }
+        });
+        $("#jobFile").on("change", function () {
+
+            if (validateJobDetailFile()) {
+                $("#invalid_JobDetailFileLength").hide();
+            }
+            else {
+                $("#invalid_JobDetailFileLength").show();
+            }
+        });
+        $(".btn_addUpdateTask").on('click', function () {
+
+            let isValid = true;
+            var curEvent = $(this);
+            var formValue = $("#addUpdateForm").serialize();
+            if (formValue !== undefined) {
+                if ($('select[name="jobId"]').val() == '' || $('select[name="jobId"]').val() == undefined) {
+                    $("#invalid_JobName").show();
+                    isValid = false;
+                }
+
+                if ($('select[name="departmentId"]').val() == '' || $('select[name="departmentId"]').val() == undefined) {
+                    $("#invalid_DepartmentName").show();
+                    isValid = false;
+                }
+                if ($('input[name="TaskName"]').val() == '' || $('input[name="TaskName"]').val() == undefined) {
+                    $("#invalid_TaskName").show();
+                    isValid = false;
+                }
+
+                if ($('input[name="TargetCompletionDate"]').val() == '' || $('input[name="TargetCompletionDate"]').val() == undefined) {
+                    $("#invalid_TargetCompletionDate").show();
+                    isValid = false;
+                }
+
+                if ($('select[name="userId"]').val() == '' || $('select[name="userId"]').val() == undefined) {
+                    $("#invalid_UserName").show();
+                    isValid = false;
+                }
+
+                if ($('input[name="Status"]').val() == '' || $('input[name="Status"]').val() == undefined) {
+                    $("#invalid_Status").show();
+                    isValid = false;
+                }
+            }
+            if (isValid) {
+                $('#divAddTaskPopup [id^="invalid_"]').hide();
+                if (setJobDates()) {
+
+                    formValue = $("#addUpdateForm").serialize() + "&jobId=" + $("select#jobId").val();
+                    //console.log("Serailized data::"+formValue);
+                    saveOrUpdate(formValue);
+                }
+            }
+        });
+        Dropzone.autoDiscover = false;
+  
+        jobid = getParameterByName("jobId");
+        var uploader = new Dropzone('#uploadWidget', { 'addRemoveLinks': true, 'clickable': true, 'createImageThumbnails': true });
+        uploader.on("removedfile", function (file, id) {
+            for (var i = 0; i < fileIds.length; ++i) {
+                if (fileIds[i] == file.id) {
+                    $.ajax({
+                        url: '/Jobs/DeleteUploadedFile',
+                        data: { 'jobFileUploadId': file.id },
+                        type: 'POST',
+                        success: function () {
+                            // console.log("file deleted");
+                            window.location.reload();
+                        },
+                        error: function () {
+                            // console.log("file deleted");
+                        }
+
+                    })
+                }
+            }
+
+
+        });
+        uploader.on("addedfile", function (file) {
+            showFile(file);
+
+        });
+        uploader.on("success", function (file, responseText) {
+            location.reload();
+
+        });
+        refreshData(uploader);
+    });
+    function refreshData(uploader) {
+        $.getJSON("/Jobs/GetJobFiles?jobId=" + jobid).done(function (data) {
+         
+            if (data.data != null && data.data != "") {
+                if (parseInt(data.data.length) > 0) {
+                   $.each(data.data, function (index, item) {
+                        loadData = true;
+
+                        filePath = item.FilePath.replace(/\\/g, '/');
+                        fileName = filePath.substring(filePath.lastIndexOf("/") + 1);
+                        fileExt = fileName.substring(fileName.indexOf("."));
+                        var mockFile = {
+                            url: fileName,
+                            id: item.JobFileUploadId,
+                            name: fileName.split('_')[0] + fileExt
+                        };
+                       fileIds.push(mockFile.id);
+                       uploader.emit("addedfile", mockFile);
+                       uploader.on("thumbnail", mockFile, fileName);
+                       uploader.emit("complete", mockFile);
+                     });
+
+                    loadData = false;
+                }
+                else {
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        });
+    }
+    function showFile(file) {
+       var a = document.createElement('a');
+        a.setAttribute("style", "cursor:hand");
+        a.setAttribute('href', "/uploads/" + file.url);
+        a.setAttribute('target', "_blank");
+        a.innerHTML = "Show";
+        file.previewTemplate.appendChild(a);
+        $("div.dz-size").remove();
+
+    }
+    $(window).load(function () {
+        $('#addUpdateForm').find("input, textarea, select#departmentId,select#userId, number").val("");
+        $("div.taskList").find("input[type='search']").closest('label').append('<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#myJobDetailTaskModal" id="btnAddTask" style="margin-left: 50px">New Task</button>');
+    })
+    function confirmTaskCompletion(taskId, event) {
+        var isChecked = $(event.target).is(':checked');
+        if (isChecked) {
+            this.taskId = taskId;
+            $("#btnTaskComplete").click();
+        }
+    }
+    function completeTask() {
+        $.ajax({
+            url: '/Jobs/CompleteTask?taskId=' + taskId,
+            type: 'GET',
+            success: function (result) {
+                if (result.success == true) {
+                    $(event.target).closest('td').html('<i class="fa fa-fw fa-check" title="Completed Task"></i>');
+                    taskId = 0;
+                    window.location.reload();
+                }
+            }
+        });
+    }
+    function removeTaskCheckboxMark() {
+        $("div.taskList").find("input[id='chk" + this.taskId + "']:checkbox").prop('checked', false);
+    }
+
+    function getParameterByName(name) {
+
+        url = window.location.href;
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+            results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    function UploadFileJobs(jobid) {
+        $("#invalid_JobDetailFileLength").hide();
+        $("#jobDetailFile").val('');
+        jobId = jobid;
+    }
+    function UploadFileSave() {
+        saveUploadFile(jobId);
+    }
+    function validateJobDetailFile() {
+
+        var fileUpload = $("#jobDetailFile").get(0);
+        var files = fileUpload.files;
+        if (files.length > 0)
+            return true;
+        else
+            return false;
+    }
+    function setJobFileDeleteId(fileId) {
+        jobFileDeleteId = fileId;
+    }
+    function saveUploadFile(jobId) {
+
+        if (window.FormData !== undefined) {
+            if (validateJobDetailFile()) {
+                var fileUpload = $("#jobDetailFile").get(0);
+                var files = fileUpload.files;
+                var fileData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+                fileData.append('jobid', jobId);
+                $.ajax({
+                    type: 'POST',
+                    url: '/Jobs/saveUploadFile?',
+                    contentType: false,
+                    processData: false,
+                    data: fileData,
+                    success: function (result) {
+                        if (result.success) {
+
+                            $('.close').click();
+                            $.notify({
+                                title: "<strong>Success:</strong> ",
+                                message: "File  succesfully uploaded.",
+                            },
+                                {
+                                    type: 'success',
+                                    allow_dismiss: false,
+                                    showProgressbar: true,
+                                    delay: '100',
+                                    newest_on_top: true,
+                                });
+                        }
+                        else if (result.error) {
+                            $.notify({
+                                title: "<strong>Error:</strong> ",
+                                message: "File could not be uploaded.",
+                            },
+                                {
+                                    type: 'error',
+                                    allow_dismiss: false,
+                                    showProgressbar: true,
+                                    delay: '100',
+                                    newest_on_top: true,
+                                });
+
+                        }
+                        setTimeout(() => {
+                            window.location.reload();
+
+                        }, 2000);
+                    }
+                });
+            }
+            else {
+                $("#invalid_JobDetailFileLength").show();
+            }
+
+        } else {
+
+        }
+    }
+    function saveOrUpdate(formValue) {
+
+        $.ajax({
+            type: 'POST',
+            url: "/Task/AddTask",
+            async: false,
+            data: formValue,
+            success: function (result) {
+                if (result.success) {
+                    $('.close').click();
+                    $.notify({
+                        title: result.title,
+                        message: result.message,
+                    },
+                        {
+                            type: result.type,
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
+        });
+    }
+    function setJobDates() {
+        var targetCompleteDate = $("#TargetCompletionDate").val();
+        if (targetCompleteDate != null && targetCompleteDate != undefined && targetCompleteDate != "") {
+            var dateParameters = targetCompleteDate.split('/');
+            var month = dateParameters[0];
+            var day = dateParameters[1];
+            var year = dateParameters[2];
+            $("#TargetCompletionDate").val(year + "-" + month + "-" + day);
+            $("#TargetCompletionDate").attr('value', year + "-" + month + "-" + day);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    function deleteJobFile() {
+
+        $.ajax({
+            url: "/Jobs/DeleteUploadedFile",
+            type: "POST",
+            data: { 'jobFileUploadId': jobFileDeleteId },
+            async: false,
+            success: function (result) {
+                window.location.reload();
+
+            },
+            error: function (error) {
+
+            }
+        });
+
+    }
+</script>
+
+
+
+
+

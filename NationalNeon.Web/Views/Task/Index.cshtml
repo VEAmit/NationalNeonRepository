@@ -1,0 +1,251 @@
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <!-- row -->
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noprint form-group">
+            <button onclick="window.history.back();" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Back</button>
+            <button id="refreshTask" class="btn btn-danger export-data"><i class="fa fa-repeat"></i> Refresh</button>
+
+            <a href="@Url.Action("DownloadViewPDF","Task")" class="btn btn-danger export-data  pull-right" style="display: inline-block; margin-left: 10px;">Export All Work Orders</a>
+            <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal" id="newTask">New Task</button>
+            <button id="print" onclick="window.print()" class="btn btn-danger export-data pull-right "><i class="fa fa-print"></i> Print</button>
+            @*<button class="btn btn-danger new-jobs export-data" style="display:none">Export All Work Orders</button>*@
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                    <div class="modal-body" id="divAddPopup">
+                        <!-- Modal content-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tasksList">
+    </div>
+    <!-- NEW WIDGET START -->
+    <!-- WIDGET END -->
+    <!-- end row -->
+    <!-- end row -->
+
+</section>
+<!-- end widget grid -->
+@*<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+<script>
+    $(document).ready(function () {
+
+        var TaskId = 0;
+        taskList();
+
+        $.ajax({
+            url: "/Task/AddTask",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddPopup").html(result);
+            }
+        });
+
+        $("#newTask").click(function () {
+            $('#addUpdateForm').find("input, textarea, select, number").val("");
+        });
+
+        //$(".tasksList").delegate(".btn_complete", "click", function (e) {
+        //    var curEvent = $(this);
+        //    const taskId = curEvent.attr('taskid');
+        //    $.ajax({
+        //        type: "POST",
+        //        url: "/Task/TaskCompleted?id=" + taskId + "",
+        //        async: false,
+        //        success: function (result) {
+        //            if (result.success) {
+        //                //taskList();
+        //                window.location.reload();
+        //            }
+        //        }
+        //    });
+        //});
+
+        $(".btn_addUpdateTask").on('click', function () {
+            let isValid = true;
+            var curEvent = $(this);
+            var formValue = $("#addUpdateForm").serialize();
+            if (formValue !== undefined) {
+                if ($('select[name="jobId"]').val() == '' || $('select[name="jobId"]').val() == undefined) {
+                    $("#invalid_JobName").show();
+                    isValid = false;
+                }
+
+                if ($('select[name="departmentId"]').val() == '' || $('select[name="departmentId"]').val() == undefined) {
+                    $("#invalid_DepartmentName").show();
+                    isValid = false;
+                }
+                if ($('input[name="TaskName"]').val() == '' || $('input[name="TaskName"]').val() == undefined) {
+                    $("#invalid_TaskName").show();
+                    isValid = false;
+                }
+                //if ($('number[name="BudgetedHours"]').val() == '' || $('number[name="BudgetedHours"]').val() == undefined) {
+                //    $("#invalid_BudgetedHours").show();
+                //    isValid = false;
+                //}
+                if ($('input[name="TargetCompletionDate"]').val() == '' || $('input[name="TargetCompletionDate"]').val() == undefined) {
+                    $("#invalid_TargetCompletionDate").show();
+                    isValid = false;
+                }
+
+                if ($('select[name="userId"]').val() == '' || $('select[name="userId"]').val() == undefined) {
+                    $("#invalid_UserName").show();
+                    isValid = false;
+                }
+                //if ($('input[name="Employee"]').val() == '' || $('input[name="Employee"]').val() == undefined) {
+                //    $("#invalid_Employee").show();
+                //    isValid = false;
+                //}
+                if ($('input[name="Status"]').val() == '' || $('input[name="Status"]').val() == undefined) {
+                    $("#invalid_Status").show();
+                    isValid = false;
+                }
+            }
+            if (isValid) {
+                $('#divAddPopup [id^="invalid_"]').hide();
+                if (setJobDates()) {
+                    formValue = $("#addUpdateForm").serialize();
+                    saveOrUpdate(formValue);
+                }
+            }
+        });
+    });
+
+    function taskList() {
+        $.ajax({
+            url: "/Task/TaskList",
+            async: false,
+            success: function (result) {
+                // $(".tasksList").html('');
+                $(".tasksList").html(result);
+            }
+        });
+    }
+
+    function saveOrUpdate(formValue) {
+        //$.noConflict();
+        $.ajax({
+            type: 'POST',
+            url: "/Task/AddTask",
+            async: false,
+            data: formValue,
+            //success: function (result) {
+            //    if (result.success) {
+            //        taskList();
+            //        $('#closePop').click();
+            //    }
+            //}
+            success: function (result) {
+                if (result.success) {
+                    $('.close').click();
+                    $.notify({
+                        title: result.title,
+                        message: result.message,
+                    },
+                        {
+                            type: result.type,
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
+        });
+
+    }
+
+    function deleteTask() {
+        callDelete(TaskId);
+        $("#btn_closeConfirm").click();
+    }
+
+    function setTaskID(Taskid) {
+        TaskId = Taskid;
+    }
+
+    function callDelete(TaskId) {
+        // $.noConflict();
+        $.ajax({
+            type: 'POST',
+            url: '/Task/DeleteTasks?id=' + TaskId + '',
+            success: function (result) {
+                if (result.success) {
+                    $('.close').click();
+                    $.notify({
+                        title: "<strong>Deleted:</strong> ",
+                        message: "Tasks Deleted Succesfully",
+                    },
+                        {
+                            type: 'danger',
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+                setTimeout(() => {
+                    window.location.reload();
+                    //window.location.href = "/Department";
+                    //taskList();
+                }, 2000);
+            }
+        });
+    }
+
+    $("#refreshTask").click(function () {
+        history.go(0);
+    });
+    //-----------------------
+    function completeTask() {
+        $.ajax({
+            type: "POST",
+            url: "/Task/TaskCompleted?id=" + TaskId + "",
+            async: false,
+            success: function (result) {
+                if (result.success) {
+                    window.location.reload();
+                    $("#btn_taskCompleteConfirm").click();
+                    $.notify({
+                        title: "<strong>Completed:</strong> ",
+                        message: "Tasks successfully completed.",
+                    },
+                        {
+                            type: 'success',
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+            }
+        });
+
+    }
+
+    //----------------
+    function setJobDates() {
+        var targetCompleteDate = $("#TargetCompletionDate").val();
+        if (targetCompleteDate != null && targetCompleteDate != undefined && targetCompleteDate != "") {
+            var dateParameters = targetCompleteDate.split('/');
+            var month = dateParameters[0];
+            var day = dateParameters[1];
+            var year = dateParameters[2];
+            $("#TargetCompletionDate").val(year + "-" + month + "-" + day);
+            $("#TargetCompletionDate").attr('value', year + "-" + month + "-" + day);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+</script>

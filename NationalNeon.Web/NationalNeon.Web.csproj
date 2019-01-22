@@ -1,0 +1,112 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE;RELEASE;NETCOREAPP;NETCOREAPP2_0</DefineConstants>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <Compile Remove="wwwroot\js\plugin\**" />
+    <Content Remove="obj\**" />
+    <Content Remove="wwwroot\js\plugin\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="wwwroot\js\plugin\**" />
+    <None Remove="obj\**" />
+    <None Remove="wwwroot\js\plugin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ViewModels\DashboardViewModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\Home\jobs.cshtml" />
+    <Content Remove="Views\Jobs\Jobs.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="bin\Debug\netcoreapp2.0\NationalNeon.Web.deps.json" />
+    <Content Include="bin\Debug\netcoreapp2.0\NationalNeon.Web.runtimeconfig.dev.json" />
+    <Content Include="bin\Debug\netcoreapp2.0\NationalNeon.Web.runtimeconfig.json" />
+    <Content Include="bin\Release\netcoreapp2.0\NationalNeon.Web.deps.json" />
+    <Content Include="bin\Release\netcoreapp2.0\NationalNeon.Web.runtimeconfig.dev.json" />
+    <Content Include="bin\Release\netcoreapp2.0\NationalNeon.Web.runtimeconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="bootstrap" Version="4.1.0" />
+    <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="Expressmapper" Version="1.9.1" />
+    <PackageReference Include="jQuery" Version="3.3.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.1" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="RotativaCore" Version="2.2.0" />
+    <PackageReference Include="System.Data.Common" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bin\Debug\netcoreapp2.0\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\Microsoft.DiaSymReader.Native.x86.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Business.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Business.dll.config" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Business.pdb" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Domain.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Domain.dll.config" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Domain.pdb" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Repository.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Repository.dll.config" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Repository.pdb" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Utility.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Utility.pdb" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Web.dll" />
+    <None Include="bin\Debug\netcoreapp2.0\NationalNeon.Web.pdb" />
+    <None Include="bin\Release\netcoreapp2.0\Microsoft.DiaSymReader.Native.amd64.dll" />
+    <None Include="bin\Release\netcoreapp2.0\Microsoft.DiaSymReader.Native.x86.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Business.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Business.dll.config" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Business.pdb" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Domain.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Domain.dll.config" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Domain.pdb" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Repository.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Repository.dll.config" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Repository.pdb" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Utility.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Utility.pdb" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Web.dll" />
+    <None Include="bin\Release\netcoreapp2.0\NationalNeon.Web.pdb" />
+    <None Include="Views\Department\Index.cshtml" />
+    <None Include="wwwroot\Rotativa\wkhtmltoimage.exe" />
+    <None Include="wwwroot\Rotativa\wkhtmltopdf.exe" />
+    <None Include="wwwroot\scripts\Jobs.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NationalNeon.Business\NationalNeon.Business.csproj" />
+    <ProjectReference Include="..\NationalNeon.Domain\NationalNeon.Domain.csproj" />
+    <ProjectReference Include="..\NationalNeon.Repository\NationalNeon.Repository.csproj" />
+    <ProjectReference Include="..\NationalNeon.Utility\NationalNeon.Utility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
+</Project>

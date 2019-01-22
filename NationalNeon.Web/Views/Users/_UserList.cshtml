@@ -1,0 +1,65 @@
+@model NationalNeon.Web.ViewModels.UserViewModel
+
+
+<article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false">
+
+        <header><span class="widget-icon"> <i class="fa fa-briefcase"></i> </span><h2>User</h2></header>
+
+        <!-- widget div-->
+        <div>
+            <!-- widget edit box -->
+            <div class="jarviswidget-editbox">
+                <!-- This area used as dropdown edit box -->
+            </div>
+            <!-- end widget edit box -->
+            <!-- widget content -->
+
+            <div class="widget-body no-padding text-left">
+                <div class="table-responsive">
+                    <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in ViewBag.Model)
+                            {
+                                <tr>
+                                    <td>
+                                         @item.username
+                                    </td>
+                                    <td>
+                                         @item.role
+                                        <input type="hidden" value="@item.userId" />
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- end widget content -->
+
+        </div>
+        <!-- end widget div -->
+
+    </div>
+    <!-- end widget -->
+</article>
+<script>
+    $(document).ready(function () {
+        $("div.userList tbody tr").on("mouseover", function () {
+            $(this).css("cursor", "pointer");
+        }).on("click", function (event) {
+            userId = $(this).find("td:last input[type='hidden']").val();
+            if (userId != "") {
+                location.href = "/UserDetails?userId=" + userId;
+            }
+        });
+    });
+</script>
