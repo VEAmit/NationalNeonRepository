@@ -148,7 +148,6 @@ namespace NationalNeon.Business.Concrete
             catch (Exception ex)
             {
                 return false;
-
             }
         }
         public void UpdateJobFileReference(int jobId)
@@ -162,7 +161,6 @@ namespace NationalNeon.Business.Concrete
                     jobFileUploadRepository.Update(fileUpload);
                 }
             }
-
         }
         public void UpdateTaskJobReference(int jobId)
         {
@@ -192,15 +190,12 @@ namespace NationalNeon.Business.Concrete
 
         public void UpdateJobTargetDate(int jobId, DateTime targetCompletionDate)
         {
-
             var job = jobRepositorty.GetAll().SingleOrDefault(u => u.jobId == jobId);
             if (job != null)
             {
                 job.target_completion_date = targetCompletionDate;
                 jobRepositorty.Update(job);
             }
-
-
         }
 
     }
