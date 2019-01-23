@@ -990,7 +990,9 @@
                                     center: 'prev, next, today',
                                     right: 'month, agendaWeek, agenDay' //month, agendaDay,
                                 },
-
+                                eventClick: function (event, jsEvent, view) {
+                                    window.location.href = "/Jobs/Detail?jobId=" + event.jobid;
+                                },
                                 select: function (start, end, allDay) {
                                     var title = prompt('Event Title:');
                                     if (title) {
