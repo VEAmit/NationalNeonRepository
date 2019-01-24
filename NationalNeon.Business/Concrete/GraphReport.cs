@@ -18,6 +18,7 @@ namespace NationalNeon.Business.Concrete
         public bool? VisibleOnDashboard { get; set; }
         public string DepartmentName { get; set; }
         public Int32 TotalHours { get; set; }
+        public string Color { get; set; }
         #endregion
 
         string ConnectionString = string.Empty;
@@ -61,6 +62,7 @@ namespace NationalNeon.Business.Concrete
             obj.DepartmentName = dr["DepartmentName"].ToString();
             obj.TotalHours = dr["TotalHours"] == DBNull.Value ? 0 : Convert.ToInt32(dr["TotalHours"]);
             obj.VisibleOnDashboard = dr["VisibleOnDashboard"] == DBNull.Value ? false : Convert.ToBoolean(dr["VisibleOnDashboard"]);
+            obj.Color = dr["Color"].ToString();
             return obj;
 
         }

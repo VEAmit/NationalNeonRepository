@@ -413,6 +413,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Admin\Employee\EmployeeModel.cs" />
     <Compile Include="Department\DepartmentModel.cs" />
     <Compile Include="Job\JobFileUploadModel.cs" />
     <Compile Include="Job\JobModel.cs" />

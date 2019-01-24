@@ -48,6 +48,8 @@
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
         <link href="~/css/dropzone.css" rel="stylesheet" />
+        <link href="~/css/colorpicker/colorpicker.css" rel="stylesheet" />
+
         @*<link href="~/css/fine-uploader.css" rel="stylesheet" />*@
 
     </environment>
@@ -362,13 +364,13 @@
             </span>
             <!-- breadcrumb -->
             @*@if (ViewContext.RouteData.Values["Controller"].ToString() == "Home")
-            {
-                @:> @Html.ActionLink("Home", "dashboard", ViewContext.RouteData.Values["controller"].ToString())
-            }
-            @if (ViewContext.RouteData.Values["Controller"].ToString() == "Jobs")
-            {
-                @:> @Html.ActionLink("Home", "jobs", ViewContext.RouteData.Values["controller"].ToString())
-            }*@
+                {
+                    @:> @Html.ActionLink("Home", "dashboard", ViewContext.RouteData.Values["controller"].ToString())
+                }
+                @if (ViewContext.RouteData.Values["Controller"].ToString() == "Jobs")
+                {
+                    @:> @Html.ActionLink("Home", "jobs", ViewContext.RouteData.Values["controller"].ToString())
+                }*@
             <ol class="breadcrumb">
                 <li>Home</li>
                 <li>
@@ -426,7 +428,7 @@
 
     <environment include="Production,Development">
         @*<script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>*@
+            <script src="~/js/site.js" asp-append-version="true"></script>*@
 
         <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
         @*<script data-pace-options='{ "restartonrequestafter": true }' src="~/js/plugin/pace/pace.min.js"></script>*@
@@ -476,9 +478,9 @@
         <script src="~/js/plugin/fastclick/fastclick.min.js"></script>
         <!--[if IE 8]>
 
-    <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+        <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
 
-    <![endif]-->
+        <![endif]-->
         <!-- Demo purpose only -->
         @*<script src="~/js/demo.min.js"></script>*@
         <!-- MAIN APP JS FILE -->
@@ -513,9 +515,11 @@
         <script src="~/js/plugin/morris/raphael.min.js"></script>
         <script src="~/js/plugin/morris/raphael.2.1.0.min.js"></script>
         <script src="~/scripts/dropzone.js"></script>
+        <script src="~/js/colorpicker/colorpicker.js"></script>
+        <script src="~/js/libs/jquery-ui-1.10.3.min.js"></script>
         @*<script src="~/js/dropzone.js"></script>*@
         @*<script src="~/js/plugin/dropzone/dropzone.min.js"></script>
-        <script src="~/js/plugin/dropzone/dropzone-amd-module.min.js"></script>*@
+            <script src="~/js/plugin/dropzone/dropzone-amd-module.min.js"></script>*@
 
         <script type="text/javascript">
 
@@ -969,7 +973,7 @@
                     type: "GET",
                     url: "/Jobs/GetCalenderJobsList",
                     success: function (response) {
-                        
+
                         if ($("#calendar").length) {
                             var date = new Date();
                             var d = date.getDate();
@@ -1013,7 +1017,7 @@
                                     if (!event.description == "") {
                                         element.find('.fc-event-title').append("<br/><span class='ultra-light'>" + event.description + "</span>");
                                         element.append("<br/><input type='hidden' id='hdnJobId' value='" + event.jobid + "'>");
-                                       
+
                                     }
                                     if (!event.icon == "") {
                                         element.find('.fc-event-title').append("<i class='air air-top-right fa " + event.icon + " '></i>");
@@ -1024,7 +1028,7 @@
                                     //console.log(event.title + " was dropped on " + event.start.format()+",jobid:"+event.jobid);
                                     updateJobTargetDate(event.jobid, event.start.format());
                                 }
-                                
+
                             });
                             /* hide default buttons */
                             $('.fc-header-right, .fc-header-center').hide();
@@ -1065,17 +1069,19 @@
                     },
                 });
 
+                var barColors = [];
                 $.ajax({
                     type: "GET",
                     url: "/Home/BindGraph",
                     success: function (response) {
                         var arrr = [];
                         $.each(response.data, function (index, value) {
-                      
-                            if (value.visibleOnDashboard==true) {
+
+                            if (value.visibleOnDashboard == true) {
                                 var obj = { x: 0, y: 0 }
                                 obj.x = value.departmentName;
                                 obj.y = value.totalHours;
+                                barColors.push(value.color);
                                 arrr.push(obj);
                             }
                         })
@@ -1086,15 +1092,18 @@
                             "ykeys": ["y"],
                             "labels": ["Hours"],
                             "xLabelMargin": 0,
+                            "barColors": function (row, series, type) {
+                                return barColors[row.x];
+                            },
                             //"behaveLikeLine": true,
                             //"resize": true,
-                             //"barGap": 1,
+                            //"barGap": 1,
                             "barSizeRatio": 0.30
                             //fillOpacity: 0.6
-                            
-                           
+
+
                         })
-                        
+
                     }
                 });
                 /*
@@ -1145,15 +1154,15 @@
 
             });
             function updateJobTargetDate(jobId, targetCompletionDate) {
-               
+
                 $.ajax({
                     url: 'Jobs/UpdateJobTargetDate',
                     data: { 'jobId': jobId, 'targetCompletionDate': targetCompletionDate },
                     success: function (result) {
-                          location.reload();
-                   },
+                        location.reload();
+                    },
                     error: function (error) {
-                   }
+                    }
                 })
 
             }
@@ -1342,7 +1351,7 @@
             </script>
             <script src="~/js/site.min.js" asp-append-version="true"></script>
         </environment>*@
-    
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums\AgeGroupEnum.cs" />
+    <Compile Include="Enums\EmployeeType.cs" />
     <Compile Include="Enums\EnumHelper.cs" />
     <Compile Include="Enums\RoleEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

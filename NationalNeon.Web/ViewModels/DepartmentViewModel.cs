@@ -21,6 +21,7 @@ namespace NationalNeon.Web.ViewModels
         public int DepartmentId { get; set; }
 
         public bool? VisibleOnDashboard { get; set; }
+        public string Color { get; set; }
 
     }
 }

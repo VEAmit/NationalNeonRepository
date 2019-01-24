@@ -54,6 +54,7 @@ namespace NationalNeon.Business.Concrete
                 data.description = model.description;
                 data.updated_on = DateTime.Now;
                 data.VisibleOnDashboard = model.VisibleOnDashboard;
+              //  data.Color = model.Color;
                 departmentRepository.Update(data);
             }
         }

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NationalNeon.Business.Interfaces;
 using NationalNeon.Business.Concrete;
+using NationalNeon.Domain.Admin.Employee;
 
 namespace NationalNeon.Business.Intrastructure
 {
@@ -21,6 +22,9 @@ namespace NationalNeon.Business.Intrastructure
             services.AddTransient<IJobBusiness, JobBusiness>();
             services.AddTransient<ITaskBusiness,TaskBusiness>();
             services.AddTransient<IGraphReport, GraphReport>();
+            services.AddTransient<EmployeeModel, EmployeeModel>();
+            services.AddTransient<IEmployeeBusiness, EmployeeBusiness>();
+            services.AddTransient<EmployeeBusiness, EmployeeBusiness>();
         }
     }
 }

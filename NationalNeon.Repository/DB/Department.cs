@@ -26,5 +26,7 @@ namespace NationalNeon.Repository.DB
         public virtual ICollection<Task> Tasks { get; set; }
 
         public bool? VisibleOnDashboard { get; set; }
+        public string Color { get; set; }
+      
     }
 }

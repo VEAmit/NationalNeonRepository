@@ -1,0 +1,50 @@
+@model NationalNeon.Web.ViewModels.EmployeeViewModel
+<style>
+    .has-error {
+        color: red;
+        display: none;
+    }
+</style>
+<div class="modal-content">
+    <div class="modal-header modal-popup-header">
+        <button type="button" class="close" data-dismiss="modal" id="closePop">&times;</button>
+        <h1 class="modal-title">New Employee</h1>
+    </div>
+    <div class="modal-body">
+
+       <form asp-action="AddUpdateEmployee" asp-controller="Admin" id="addUpdateEmployee">
+            <div class="form-group">
+                <label class="control-label">First Name</label>
+                <input asp-for="FirstName" class="form-control" min="0" required onchange="$(this).parent().find('.has-error').hide();" />
+                <span class="has-error" id="invalid_FirstName">Please enter First name</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Last Name</label>
+                <input asp-for="LastName" autocomplete="off" class="form-control" required onchange="$(this).parent().find('.has-error').hide();" />
+                <span class="has-error" id="invalid_LastName">Please enter Last name</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Type</label>
+                @Html.DropDownListFor(m => m.EmployeeType, (SelectList)ViewBag.EmployeeType, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                <span class="has-error" id="invalid_EmployeeType">Please Select Type</span>
+            </div>
+           
+            <input asp-for="EmployeeId" type="hidden" hidden class="form-control" />
+            <footer class="text-center form-submit">
+                <button type="button" class="btn btn-danger form-submit-btn btn_addUpdateEmployee">Submit</button>
+            </footer>
+        </form>
+    </div>
+</div>
+<script>
+
+    function drp(obj) {
+        if (obj.parentNode.children[2] != undefined) {
+            obj.parentNode.children[2].remove();
+        }
+    }
+</script>
+
+
+
+

@@ -78,11 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Concrete\DepartmentBusiness.cs" />
+    <Compile Include="Concrete\EmployeeBusiness.cs" />
     <Compile Include="Concrete\JobBusiness.cs" />
     <Compile Include="Concrete\GraphReport.cs" />
     <Compile Include="Concrete\TaskBusiness.cs" />
     <Compile Include="Concrete\UserBusiness.cs" />
     <Compile Include="Interfaces\IDepartmentBusiness.cs" />
+    <Compile Include="Interfaces\IEmployeeBusiness.cs" />
     <Compile Include="Interfaces\IJobBusiness.cs" />
     <Compile Include="Interfaces\IGraphReport.cs" />
     <Compile Include="Interfaces\ITaskBusiness.cs" />

@@ -27,6 +27,7 @@ namespace NationalNeon.Domain.Department
         public DateTime updated_on { get; set; }
 
         public bool? VisibleOnDashboard { get; set; }
+        public string Color { get; set; }
 
     }
 }

@@ -44,15 +44,17 @@ namespace NationalNeon.Web.Controllers
         [HttpPost]
         public ActionResult AddDepartment(DepartmentViewModel model)
         {
+            
             if (ModelState.IsValid)
             {
                 DepartmentModel data = new DepartmentModel();
                 Mapper.Map(model, data);
                 data.created_on = DateTime.Now;
                 data.updated_on = DateTime.Now;
-                data.VisibleOnDashboard = model.VisibleOnDashboard??false;
+                data.VisibleOnDashboard = model.VisibleOnDashboard ?? false;
+                data.Color = model.Color!=null ? model.Color : "#0000FF";
                 idepartmentBusiness.AddDepartment(data);
-                //return RedirectToAction("Index");
+
                 return Json(new
                 {
                     success = true
@@ -101,7 +103,8 @@ namespace NationalNeon.Web.Controllers
             model.DepartmentName = data.departmentname;
             model.Description = data.description;
             model.DepartmentId = data.departmentId;
-            model.VisibleOnDashboard = data.VisibleOnDashboard ; 
+            model.VisibleOnDashboard = data.VisibleOnDashboard;
+            model.Color = data.Color;
             return PartialView("_Edit", model);
         }
 
@@ -113,6 +116,7 @@ namespace NationalNeon.Web.Controllers
             data.departmentname = model.DepartmentName;
             data.description = model.Description;
             data.VisibleOnDashboard = model.VisibleOnDashboard ?? false;
+            data.Color = model.Color;
             idepartmentBusiness.Update(data);
             // return RedirectToAction("Index");
             return Json(new
