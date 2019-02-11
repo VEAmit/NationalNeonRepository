@@ -39,8 +39,11 @@ namespace NationalNeon.Business.Concrete
         public List<JobModel> GetAllJobsOnView()
         {
             var jobmodel = new List<JobModel>();
-            var model = jobRepositorty.GetAll(null, null, "JobFileUpload").Where(a => a.status != "Archived").ToList();
+            var model = jobRepositorty.GetAll(null, null, "JobFileUpload,Tasks").Where(a => a.status != "Archived").ToList();
             return Mapper.Map(model, jobmodel);
+            //var jobmodel = new List<JobModel>();
+            //var model = jobRepositorty.GetAll(null, null, "JobFileUpload").Where(a => a.status != "Archived").ToList();
+            //return Mapper.Map(model, jobmodel);
         }
 
         public List<JobModel> ddlGetAllJobs()

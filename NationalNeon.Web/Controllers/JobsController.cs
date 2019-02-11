@@ -40,7 +40,20 @@ namespace NationalNeon.Web.Controllers
         }
         public ActionResult JobsList()
         {
+            //var model = ijobBusiness.GetAllJobsOnView();
+            //ViewBag.Model = model;
+            //return PartialView("_JobsList");
             var model = ijobBusiness.GetAllJobsOnView();
+
+            foreach (var modalItem in model)
+            {
+                if (modalItem.Tasks.Count > 0)
+                {
+                    var completedTaskTotalHours = modalItem.Tasks.Where(row => row.Completed == 1).Sum(row => Convert.ToDecimal(row.BudgetedHours));
+                    var totalHours = modalItem.Tasks.Sum(row => Convert.ToDecimal(row.BudgetedHours));
+                    modalItem.ProgressPercent = Convert.ToString(Convert.ToInt32(Math.Round(completedTaskTotalHours / totalHours, 2) * 100)) + "%";
+                }
+            }
             ViewBag.Model = model;
             return PartialView("_JobsList");
         }

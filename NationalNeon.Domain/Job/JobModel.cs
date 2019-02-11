@@ -28,5 +28,6 @@ namespace NationalNeon.Domain.Job
         public DateTime updated_on { get; set; }
         public ICollection<JobFileUploadModel> JobFileUpload { get; set; }
         public virtual ICollection<TaskModel> Tasks { get; set; }
+        public string ProgressPercent { get; set; }
     }
 }

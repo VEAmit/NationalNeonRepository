@@ -12,6 +12,7 @@ namespace NationalNeon.Web.ViewModels
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public EmployeeType EmployeeType { get; set; }
+        public int DepartmentId { get; set; }
 
     }
 }

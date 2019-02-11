@@ -348,15 +348,38 @@
     <Compile Include="Concrete\UnitOfWork.cs" />
     <Compile Include="DB\ApplicationDbContext.cs" />
     <Compile Include="DB\Department.cs" />
+    <Compile Include="DB\Employee.cs" />
     <Compile Include="DB\Job.cs" />
     <Compile Include="DB\JobFileUpload.cs" />
     <Compile Include="DB\Task.cs" />
     <Compile Include="DB\User.cs" />
     <Compile Include="DepartmentRepository.cs" />
+    <Compile Include="EmployeeRepository.cs" />
     <Compile Include="Interface\IBaseRepository.cs" />
     <Compile Include="Interface\IUnitOfWork.cs" />
     <Compile Include="JobFileUploadRepository.cs" />
     <Compile Include="JobRepositorty.cs" />
+    <Compile Include="Migrations\20190124063222_sddf.cs" />
+    <Compile Include="Migrations\20190124063222_sddf.designer.cs">
+      <DependentUpon>20190124063222_sddf.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190124063247_jj.cs" />
+    <Compile Include="Migrations\20190124063247_jj.designer.cs">
+      <DependentUpon>20190124063247_jj.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190124063726_emptablecanges.cs" />
+    <Compile Include="Migrations\20190124063726_emptablecanges.designer.cs">
+      <DependentUpon>20190124063726_emptablecanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190124064100_emptbl1.cs" />
+    <Compile Include="Migrations\20190124064100_emptbl1.designer.cs">
+      <DependentUpon>20190124064100_emptbl1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20190125094737_employetablechangese.cs" />
+    <Compile Include="Migrations\20190125094737_employetablechangese.designer.cs">
+      <DependentUpon>20190125094737_employetablechangese.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskRepository.cs" />
     <Compile Include="UserRepository.cs" />
@@ -372,6 +395,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Abstract\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NationalNeon.Utility\NationalNeon.Utility.csproj">
+      <Project>{c7fb35f0-b961-492a-90f4-a1896f431eb2}</Project>
+      <Name>NationalNeon.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

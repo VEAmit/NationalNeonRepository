@@ -12,7 +12,7 @@
     </div>
     <div class="modal-body">
 
-       <form asp-action="AddUpdateEmployee" asp-controller="Admin" id="addUpdateEmployee">
+        <form asp-action="AddUpdateEmployee" asp-controller="Admin" id="addUpdateEmployee">
             <div class="form-group">
                 <label class="control-label">First Name</label>
                 <input asp-for="FirstName" class="form-control" min="0" required onchange="$(this).parent().find('.has-error').hide();" />
@@ -25,10 +25,14 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Type</label>
-                @Html.DropDownListFor(m => m.EmployeeType, (SelectList)ViewBag.EmployeeType, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                @Html.DropDownListFor(m => m.EmployeeType, (SelectList)ViewBag.EmployeeType, "---- Select ----", new { @class = "form-control", @onchange = "drp(this);drp1()", @id = "EmployeeType" })
                 <span class="has-error" id="invalid_EmployeeType">Please Select Type</span>
             </div>
-           
+            <div class="form-group" id="DepartmentDropdown">
+                <label class="control-label">Department</label>
+                @Html.DropDownListFor(m => m.DepartmentId, (SelectList)ViewBag.DepartmentList, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                <span class="has-error" id="invalid_Department">Please Select Department</span>
+            </div>
             <input asp-for="EmployeeId" type="hidden" hidden class="form-control" />
             <footer class="text-center form-submit">
                 <button type="button" class="btn btn-danger form-submit-btn btn_addUpdateEmployee">Submit</button>
@@ -37,10 +41,30 @@
     </div>
 </div>
 <script>
-
     function drp(obj) {
         if (obj.parentNode.children[2] != undefined) {
             obj.parentNode.children[2].remove();
+        }
+    }
+</script>
+
+@*Hiding Department Dropdown on Page Load*@
+<script>
+    $(function () {
+        $("#DepartmentDropdown").hide();
+    });
+</script>
+
+@*Showing Department Dropdown only if 'Production is Selected'*@
+<script>
+    function drp1() {
+        var a = $('#EmployeeType').val();
+        debugger
+        if (a == '1') {
+            $("#DepartmentDropdown").show();
+        }
+        else {
+            $("#DepartmentDropdown").hide();
         }
     }
 </script>

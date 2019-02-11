@@ -27,5 +27,6 @@ namespace NationalNeon.Web.ViewModels
         public string description { get; set; }
 
         public bool? VisibleOnDashboard { get; set; }
+        public string Color { get; set; }
     }
 }

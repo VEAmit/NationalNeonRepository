@@ -149,7 +149,8 @@ namespace NationalNeon.Web.Controllers
                     {
                         departmentname = department.departmentname,
                         InCompleteHours = inCompleteHours,
-                        VisibleOnDashboard = department.VisibleOnDashboard ?? false
+                        VisibleOnDashboard = department.VisibleOnDashboard ?? false,
+                        Color = department.Color
                     };
                     taskdata.Add(taskdept);
                 }
@@ -183,6 +184,7 @@ namespace NationalNeon.Web.Controllers
         public IActionResult BindGraph()
         {
             var report = igraphreport.GetgraphData();
+            ViewBag.DepartmentDetails = report;
             return Json(new
             {
                 success = true,

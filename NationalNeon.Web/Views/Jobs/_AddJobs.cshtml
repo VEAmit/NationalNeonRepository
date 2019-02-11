@@ -14,7 +14,7 @@
     <div class="modal-body">
 
         @*<form asp-action="AddJobs" asp-controller="Jobs" data-ajax="true" data-ajax-method="POST" id="addUpdateJobForm">*@
-        <form asp-action="AddJobs" asp-controller="Jobs"  id="addUpdateJobForm">
+        <form asp-action="AddJobs" asp-controller="Jobs" id="addUpdateJobForm">
             <div class="form-group">
                 <label class="control-label">Job Number</label>
                 <input asp-for="job_number" class="form-control" min="0" required onchange="$(this).parent().find('.has-error').hide();" />
@@ -37,12 +37,15 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Status</label>
-                <input asp-for="status" autocomplete="off" class="form-control" />
+                @*<input asp-for="status" autocomplete="off" class="form-control" />*@
+                @Html.DropDownListFor(m => m.status, new List<SelectListItem> { new SelectListItem { Text = "Pre-Production", Value = "Pre-Production" }, new SelectListItem { Text = "Production", Value = "Production" }, new SelectListItem { Text = "Complete", Value = "Complete" } }, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                <span class="has-error" id="invalid_status">Please select status</span>
             </div>
             <div class="form-group">
                 <label class="control-label">Scheduled Date</label>
                 <input type="text" asp-for="scheduled_date" autocomplete="off" data-provide="datepicker" onkeypress="return false;" class="form-control dateCalender" placeholder="click to choose a scheduled date" required onchange="$(this).parent().find('.has-error').hide();" />
                 <span class="has-error" id="invalid_scheduled_date">Please enter scheduled date</span>
+
             </div>
             <div class="form-group">
                 <label class="control-label">Revenue</label>
@@ -55,13 +58,13 @@
             </div>
             <input asp-for="jobId" type="hidden" hidden class="form-control" required />
             <footer class="text-center form-submit">
-                <button type="button" class="btn btn-danger form-submit-btn btn_addUpdateJobs" >Submit</button>
+                <button type="button" class="btn btn-danger form-submit-btn btn_addUpdateJobs">Submit</button>
             </footer>
         </form>
     </div>
 </div>
 <script>
-   
+
     function drp(obj) {
         if (obj.parentNode.children[2] != undefined) {
             obj.parentNode.children[2].remove();

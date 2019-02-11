@@ -54,7 +54,7 @@ namespace NationalNeon.Business.Concrete
                 data.LastName = model.LastName;
                 data.UpdatedOn = DateTime.Now;
                 data.EmployeeType = model.EmployeeType;
-           
+                data.DepartmentId = model.DepartmentId;
                 employeeRepository.Update(data);
             }
         }

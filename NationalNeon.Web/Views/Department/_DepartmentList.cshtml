@@ -3,11 +3,18 @@
     #tt {
         color: red;
     }
+    .swatch input {
+        height: 30px;
+        float: left;
+        border: 2px #000 solid;
+        border-radius: 5px;
+    }
 </style>
 <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
     <thead>
         <tr>
             <th>Name</th>
+            <th>Department Color</th>
             <th> Description</th>
         </tr>
     </thead>
@@ -18,6 +25,12 @@
                 <td>
                     @item.departmentname
                     <input type="hidden" value="@item.departmentId" />
+                   
+                </td>
+                <td>
+                    <div class="swatch">
+                        <input type="text" style="background-color: @item.Color" />
+                    </div>
                 </td>
                 <td>@item.description</td>
             </tr>

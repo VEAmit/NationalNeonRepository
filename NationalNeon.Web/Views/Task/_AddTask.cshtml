@@ -60,7 +60,7 @@
 
             <section class="form-group">
                 <label class="control-label">Target Completion Date</label>
-                <input asp-for="TargetCompletionDate" type="text" data-provide="datepicker" class="form-control dateCalender" onkeypress="return false;" onchange="$(this).parent().find('.has-error').hide()" autocomplete="off" />
+                <input asp-for="TargetCompletionDate" type="text" data-provide="datepicker" class="form-control dateCalender" onkeypress="return false;" onchange="$(this).parent().find('.has-error').hide()" autocomplete="off" placeholder="click to choose a target completion date" />
                 @*onchange="$(this).parent().find('.has-error').hide()"*@
                 <span class="has-error" id="invalid_TargetCompletionDate">Please enter Target Completion Date</span>
                 @*<span asp-validation-for="TargetCompletionDate" class="text-danger"></span>*@
@@ -89,17 +89,19 @@
 </div>
 <script>
     $(document).ready(function () {
+        $('.dateCalender').datepicker("setDate", null);
 
         $('.dateCalender').datepicker({
             autoclose: true,
-            dateFormat: 'mm/dd/yy'
+            dateFormat: 'mm/dd/yy',
+            setDate: null
 
         }).on("change", function () {
             $(this).attr('value', this.value);
         });
-        
+
     });
-    
+
     function drp(obj) {
         if (obj.parentNode.children[2] != undefined) {
             obj.parentNode.children[2].remove();

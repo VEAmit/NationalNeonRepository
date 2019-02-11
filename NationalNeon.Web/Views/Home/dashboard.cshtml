@@ -7,27 +7,26 @@
         <button onclick="window.history.back();" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Back</button>
         <button id="refreshdashboard" class="btn btn-danger"><i class="fa fa-repeat"></i> Refresh</button>
         @*<div class="widget-body quick-action-minheight">*@
-            <div class="btn-group btn-group-md">
-                <button class="btn btn-success">New</button>
-                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li>
-                        <a href="#" class="selectAction" data-toggle="modal" data-target="#myModal" action="newJob">Job</a>
-                    </li>
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newTask" id="newTask">Task</a>
-                    </li>
+        <div class="btn-group btn-group-md">
+            <button class="btn btn-success">New</button>
+            <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="#" class="selectAction" data-toggle="modal" data-target="#myModal" action="newJob">Job</a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newTask" id="newTask">Task</a>
+                </li>
 
-                    <li class="divider"></li>
-                    <li>
-                        <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newUser">User</a>
-                    </li>
-
-                </ul>
-            </div>
+                <li class="divider"></li>
+                <li>
+                    <a href="#" data-toggle="modal" class="selectAction" data-target="#myModal" action="newUser">User</a>
+                </li>
+            </ul>
+        </div>
         @*</div>*@
     </div>
     <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
@@ -36,6 +35,8 @@
         <span id="refresh" class="btn btn-danger" data-action="resetWidgets" data-title="refresh" rel="tooltip" data-placement="bottom" data-original-title="<i class='text-warning fa fa-warning'></i> Warning! This will reset all your widget settings." data-html="true" data-reset-msg="Would you like to RESET all your saved widgets and clear LocalStorage?"><i class="fa fa-refresh"> Reset Widgets</i></span>
 
     </div>
+    @*Add New Job*@
+
 </div>
 <!-- widget grid -->
 <section id="widget-grid" class="">
@@ -154,7 +155,7 @@
                                 {
                                     if (item.VisibleOnDashboard)
                                     {
-                                    <li><p> <strong>@item.departmentname</strong>  <span class="text-muted">@item.InCompleteHours</span></p></li>
+                                        <li style="color:@item.Color"><p> <strong>@item.departmentname</strong>  <span class="text-muted">@item.InCompleteHours</span></p></li>
                                     }
                                 }
                             </ul>
@@ -219,7 +220,7 @@
                     <div class="widget-body no-padding">
                         <!-- content goes here -->
                         <div class="widget-body-toolbar">
-                            
+
                             <div id="calendar-buttons">
                                 <div class="btn-group">
                                     <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
@@ -266,8 +267,9 @@
                     <!-- end widget edit box -->
 
                     <div class="widget-body no-padding smart-form">
+
                         <!-- content goes here -->
-                        <h5 class="todo-group-title" style="color:black"><i class="fa fa-warning"></i> Assigned Tasks</h5>
+                        <h5 class="todo-group-title" style="color:black"><i class="fa fa-warning"></i> New Messages</h5>
                         <ul id="sortable1" class="todo ui-sortable">
                             <li>
                                 @*<span class="handle ui-sortable-handle">
@@ -280,48 +282,74 @@
                                     @*Coming Soon This Feature...*@
                                     @*<strong>Ticket #17643</strong> - Hotfix for WebApp interface issue [<a href="javascript:void(0);" class="font-xs">More Details</a>] <span class="text-muted">Sea deep blessed bearing under darkness from God air living isn't. </span>
                                         <span class="date">Jan 1, 2014</span>*@
+                                    @*<div class="padding0">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Sno</th>
+                                                            <th>Task Name</th>
+                                                            <th>Budget Hours</th>
+                                                            <th>Completion Date</th>
+                                                            <th>Completed</th>
+                                                            @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
+                                                            {
+                                                                <th>Employee</th>
+                                                            }
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @{
+                                                            var task_number = 0;
+                                                            @foreach (var task in ViewBag.assignedTasks)
+                                                            {
+                                                                <tr>
+                                                                    <td>@(++task_number)</td>
+                                                                    <td>@task.TaskName</td>
+                                                                    <td>@task.BudgetedHours</td>
+                                                                    <td>@task.TargetCompletionDate.ToString("D")</td>
+                                                                    @if (task.Completed == 0)
+                                                                    {
+                                                                        <td>No</td>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <td>Yes</td>
+                                                                    }
+                                                                    @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
+                                                                    {
+                                                                        <td>@task.Employee</td>
+                                                                    }
+
+                                                                </tr>
+                                                            }
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>*@
                                     <div class="padding0">
                                         <div class="table-responsive">
                                             <table class="table table-striped">
                                                 <thead>
                                                     <tr>
                                                         <th>Sno</th>
-                                                        <th>Task Name</th>
-                                                        <th>Budget Hours</th>
-                                                        <th>Completion Date</th>
-                                                        <th>Completed</th>
-                                                        @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
-                                                        {
-                                                            <th>Employee</th>
-                                                        }
-
+                                                        <th>Message Description</th>
+                                                        <th>Employee Name</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @{
                                                         var task_number = 0;
-                                                        @foreach (var task in ViewBag.assignedTasks)
-                                                        {
-                                                            <tr>
-                                                                <td>@(++task_number)</td>
-                                                                <td>@task.TaskName</td>
-                                                                <td>@task.BudgetedHours</td>
-                                                                <td>@task.TargetCompletionDate.ToString("D")</td>
-                                                                @if (task.Completed == 0)
-                                                                {
-                                                                    <td>No</td>
-                                                                }
-                                                                else
-                                                                {
-                                                                    <td>Yes</td>
-                                                                }
-                                                                @if (ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Admin) || ViewBag.loginUserRoleType == EnumHelper<RoleEnum>.GetDisplayValue(RoleEnum.Manager))
-                                                                {
-                                                                    <td>@task.Employee</td>
-                                                                }
-
-                                                            </tr>
-                                                        }
+                                                        @*@foreach (var task in ViewBag.newMessages)
+                                                            {*@
+                                                        <tr>
+                                                            <td>@(++task_number)</td>
+                                                            <td>New Message from employee XYZ.</td>
+                                                            <td>XYZ</td>
+                                                        </tr>
+                                                        @*}*@
                                                     }
                                                 </tbody>
                                             </table>
@@ -331,27 +359,28 @@
                             </li>
                         </ul>
                     </div>
-
-                    <h2 class="todo-group-title" style="color:black"><i class="fa fa-exclamation"></i> Incomplete Tasks </h2>
-                    <ul id="sortable2" class="todo ui-sortable">
-
+                    <button class="btn btn-danger pull-right selectAction" data-toggle="modal" data-target="#myModal" id="newTask" action="newTask">New Task</button>
+                    <h2 class="todo-group-title" style="color:black"><i class="fa fa-exclamation"></i> To Do List </h2>
+                    <ul id="sortable2" class="todo ui-sortable incomplete-task">
                         @foreach (var item in ViewBag.incompleteTask)
                         {
-                            <li>
 
+                            <li>
                                 <span class="handle ui-sortable-handle">
+
                                     <label class="checkbox">
                                         <input type="checkbox" name="checkbox-inline" onclick="completetask(@item.TaskId)">
                                         <i></i>
                                     </label>
                                 </span>
                                 <p>
+                                    <strong>@(((Int32)1) + ViewBag.incompleteTask.IndexOf(item))</strong>
+                                </p>
+                                <p>
                                     <strong>@item.TaskName</strong>
                                 </p>
                             </li>
                         }
-
-
                     </ul>
 
                     <h5 class="todo-group-title" style="color:black"><i class="fa fa-check"></i> Completed Tasks</h5>
@@ -415,107 +444,113 @@
                     break;
                 case "newUser": getAddUserView();
                     break;
+
             }
-        });
-
-        // getuserDetail();
-
-        /* Here Task Pop Up Page Open and Save the data     */
-
-        function getAddTaskView() {
-            $.ajax({
-                url: "/Task/AddTask",
-                type: "GET",
-                async: false,
-                success: function (result) {
-                    $("#divAddPopup").html('');
-                    $("#divAddPopup").html(result);
-                }
-            });
-        }
-
-        $('#divAddPopup').delegate('.btn_addUpdateTask', 'click', function () {
-            var curEvent = $(this);
-            let isValid = true;
-            var formValue = $("#addUpdateForm").serialize();
-            if (formValue !== undefined) {
-                if ($('select[name="jobId"]').val() == '' || $('select[name="jobId"]').val() == undefined) {
-                    $("#invalid_JobName").show();
-                    isValid = false;
-                }
-                if ($('select[name="departmentId"]').val() == '' || $('select[name="departmentId"]').val() == undefined) {
-                    $("#invalid_DepartmentName").show();
-                    isValid = false;
-                }
-                if ($('input[name="TaskName"]').val() == '' || $('input[name="TaskName"]').val() == undefined) {
-                    $("#invalid_TaskName").show();
-                    isValid = false;
-                }
-                if ($('input[name="TargetCompletionDate"]').val() == '' || $('input[name="TargetCompletionDate"]').val() == undefined) {
-                    $("#invalid_TargetCompletionDate").show();
-                    isValid = false;
-                }
-                //----------------
-                if ($('select[name="userId"]').val() == '' || $('select[name="userId"]').val() == undefined) {
-                    $("#invalid_UserName").show();
-                    isValid = false;
-                }
-                if ($('input[name="Status"]').val() == '' || $('input[name="Status"]').val() == undefined) {
-                    $("#invalid_Status").show();
-                    isValid = false;
-                }
-            }
-            if (isValid) {
-                $('#divAddPopup [id^="invalid_"]').hide();
-                if (setTaskJobDates()) {
-                    formValue = $("#addUpdateForm").serialize();
-                    saveOrUpdate(formValue);
-                }
-            }
-            // saveOrUpdate(formValue);
-        });
-
-        function saveOrUpdate(formValue) {
-            $.ajax({
-                type: 'POST',
-                url: "/Task/AddTask",
-                async: false,
-                data: formValue,
-                success: function (result) {
-                    if (result.success) {
-                        $('#closePop').click();
-                        $.notify({
-                            title: result.title,
-                            message: result.message,
-                        },
-                            {
-                                type: result.type,
-                                allow_dismiss: false,
-                                showProgressbar: true,
-                                delay: '100',
-                                newest_on_top: true,
-                            });
-                    }
-                    setTimeout(() => {
-                        //window.location.reload();
-                        history.go(0)
-                    }, 2000)
-                }
-            });
-        }
-
-
-        $("#newTask").click(function () {
-            $('#addUpdateForm').find("input[type=text], textarea, select, number").val("");
 
         });
-        /* End Tasks Pop Up Page Save the data     */
-
-
     });
 
+    /* Here Task Pop Up Page Open and Save the data     */
+    function getAddTaskView() {
+        $.ajax({
+            url: "/Task/AddTask",
+            type: "GET",
+            async: false,
+            success: function (result) {
+                $("#divAddPopup").html('');
+                $("#divAddPopup").html(result);
 
-    /* Here Jobs Pop Up Page Open and Save the data     */
+            }
+        });
+
+    }
+    $("#newTask").click(function () {
+        $('#addUpdateForm').find("input, textarea, select, number").val("");
+
+    });
+    $('#divAddPopup').delegate('.btn_addUpdateTask', 'click', function () {
+        var curEvent = $(this);
+        let isValid = true;
+        var formValue = $("#addUpdateForm").serialize();
+        if (formValue !== undefined) {
+            if ($('select[name="jobId"]').val() == '' || $('select[name="jobId"]').val() == undefined) {
+                $("#invalid_JobName").show();
+                isValid = false;
+            }
+            if ($('select[name="departmentId"]').val() == '' || $('select[name="departmentId"]').val() == undefined) {
+                $("#invalid_DepartmentName").show();
+                isValid = false;
+            }
+            if ($('input[name="TaskName"]').val() == '' || $('input[name="TaskName"]').val() == undefined) {
+                $("#invalid_TaskName").show();
+                isValid = false;
+            }
+            if ($('input[name="TargetCompletionDate"]').val() == '' || $('input[name="TargetCompletionDate"]').val() == undefined) {
+                $("#invalid_TargetCompletionDate").show();
+                isValid = false;
+            }
+            //----------------
+            if ($('select[name="userId"]').val() == '' || $('select[name="userId"]').val() == undefined) {
+                $("#invalid_UserName").show();
+                isValid = false;
+            }
+            if ($('input[name="Status"]').val() == '' || $('input[name="Status"]').val() == undefined) {
+                $("#invalid_Status").show();
+                isValid = false;
+            }
+        }
+        if (isValid) {
+            $('#divAddPopup [id^="invalid_"]').hide();
+            if (setTaskJobDates()) {
+                formValue = $("#addUpdateForm").serialize();
+                saveOrUpdate(formValue);
+            }
+        }
+
+    });
+    /* End Tasks Pop Up Page Save the data     */
+    function saveOrUpdate(formValue) {
+        //$.noConflict();
+        $.ajax({
+            type: 'POST',
+            url: "/Task/AddTask",
+            async: false,
+            data: formValue,
+            success: function (result) {
+                if (result.success) {
+                    $('.close').click();
+                    $.notify({
+                        title: result.title,
+                        message: result.message,
+                    },
+                        {
+                            type: result.type,
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            }
+        });
+
+    }
+
+    function applyDatePicker() {
+        $('.dateCalender').datepicker({
+            autoclose: true,
+            //dateFormat: 'yyyy-mm-dd'
+            dateFormat: 'mm/dd/yy'
+
+        }).on("change", function () {
+            $(this).attr('value', this.value);
+        });
+    }
+    /* Here Jobs Pop Up Page Open and Save the data */
     function getAddJobView() {
         $.ajax({
             url: "/Jobs/AddJobs",
@@ -529,7 +564,6 @@
     }
 
     $('#divAddPopup').delegate('.btn_addUpdateJobs', 'click', function () {
-
         var curEvent = $(this);
         //var formValue = $("#addUpdateJobForm").serialize();
         let isValid = true;
@@ -549,6 +583,11 @@
                 isValid = false;
             }
 
+            if ($('input[name="status"]').val() == '' || $('input[name="status"]').val() == undefined) {
+                $("#invalid_status").show();
+                isValid = false;
+            }
+
         }
 
         if (isValid) {
@@ -559,7 +598,9 @@
             }
         }
     });
-
+    $("#newJob").click(function () {
+        $('#addUpdateJobForm').find("input, textarea, select, number").val("");
+    });
 
     function saveOrUpdatejob(formValue) {
         $.ajax({
@@ -605,6 +646,7 @@
         });
     }
 
+    /* Here User Pop Up Page Open and Save the data */
     function getAddUserView() {
         $.ajax({
             url: "/Users/AddUsers",
@@ -663,7 +705,7 @@
             }
         });
     });
-
+    /* End User Pop Up Page Save the data */
 
     function completetask(TaskId) {
 
@@ -697,6 +739,9 @@
             return false;
         }
     }
+    //----------------
+
+
     function setJobDates() {
 
         var targetCompleteDate = $("#target_completion_date").val();
@@ -724,5 +769,15 @@
         }
 
         return isValid;
+    }
+    function applyDatePicker() {
+        $('.dateCalender').datepicker({
+            autoclose: true,
+            //dateFormat: 'yyyy-mm-dd'
+            dateFormat: 'mm/dd/yy'
+
+        }).on("change", function () {
+            $(this).attr('value', this.value);
+        });
     }
 </script>

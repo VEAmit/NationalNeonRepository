@@ -15,10 +15,12 @@ namespace NationalNeon.Web.Controllers
     public class AdminController : Controller
     {
         private readonly IEmployeeBusiness iemployeeBusiness;
+        private readonly IDepartmentBusiness idepartmentBusiness;
         private readonly EmployeeModel employeeModel;
-        public AdminController(IEmployeeBusiness iemployeeBusiness, EmployeeModel employeeModel)
+        public AdminController(IEmployeeBusiness iemployeeBusiness, EmployeeModel employeeModel, IDepartmentBusiness idepartmentBusiness)
         {
             this.iemployeeBusiness = iemployeeBusiness;
+            this.idepartmentBusiness = idepartmentBusiness;
             this.employeeModel = employeeModel;
         }
         public IActionResult EmployeeIndex()
@@ -38,6 +40,8 @@ namespace NationalNeon.Web.Controllers
         }
         public IActionResult AddUpdateEmployee()
         {
+            var deptList = idepartmentBusiness.GetAll().Select(item => new { Id = item.departmentId, Name = item.departmentname }).ToList();
+            ViewBag.DepartmentList = new SelectList(deptList, "Id", "Name");
             EmployeeType employeeType = EmployeeType.Sales;
             var empTypeList = EnumHelper<EmployeeType>.GetValues(employeeType).Select(item => new { Id = (int)item, Name = item.ToString() }).ToList();
             ViewBag.EmployeeType = new SelectList(empTypeList, "Id", "Name");
@@ -46,7 +50,6 @@ namespace NationalNeon.Web.Controllers
         [HttpPost]
         public IActionResult AddUpdateEmployee(EmployeeViewModel employeeViewModel)
         {
-
             Mapper.Map(employeeViewModel, employeeModel);
             if (employeeModel.EmployeeId > 0)
                 iemployeeBusiness.Update(employeeModel);

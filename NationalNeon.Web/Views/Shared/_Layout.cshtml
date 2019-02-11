@@ -623,6 +623,7 @@
 
                 // initialize sortable
                 $(function () {
+                    debugger
                     $("#sortable1, #sortable2").sortable({
                         handle: '.handle',
                         connectWith: ".todo",
@@ -633,7 +634,7 @@
                 // check and uncheck
                 $('.todo .checkbox > input[type="checkbox"]').click(function () {
                     var $this = $(this).parent().parent().parent();
-
+                    debugger
                     if ($(this).prop('checked')) {
                         $this.addClass("complete");
 
@@ -644,7 +645,14 @@
                         // once clicked - add class, copy to memory then remove and add to sortable3
                         $this.slideUp(500, function () {
                             $this.clone().prependTo("#sortable3").effect("highlight", {}, 800);
+                            $("#sortable3").find("li:eq(0)").find("p:eq(0)").remove();
                             $this.remove();
+                            var serialNo = 0;
+                            $('#sortable2 input[type = checkbox]').each(function (index, element) {
+                                var $this = $(this).parent().parent().parent();
+                                serialNo++;
+                                $this.find("p:eq(0)").find('strong').text(serialNo);
+                            });
                             countTasks();
                         });
                     } else {

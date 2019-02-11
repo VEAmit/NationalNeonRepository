@@ -5,6 +5,8 @@
         display: none;
     }
 </style>
+<script type="text/javascript" src="~/js/colorpicker/farbtastic.js"></script>
+<link href="~/css/colorpicker/farbtastic.css" rel="stylesheet" />
 <div class="modal-header modal-popup-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h1 class="modal-title">New Department</h1>
@@ -17,7 +19,7 @@
                 <textarea asp-for="DepartmentName" required="required" rows="6" class="custom-scroll" onchange="$(this).parent().find('.has-error').hide();"></textarea>
                 <span class="has-error" id="invalid_departmentname">Please enter department name</span>
             </label>
-            
+
         </section>
 
         <section>
@@ -26,14 +28,29 @@
                 <textarea asp-for="Description" rows="6" required="required" class="custom-scroll" onchange="$(this).parent().find('.has-error').hide();"></textarea>
                 <span class="has-error" id="invalid_departmentdescription">Please enter department description</span>
             </label>
-           
+
         </section>
         <section>
             <input type="hidden" id="hdnVisibleOnDashboard" value="@Model.VisibleOnDashboard" />
             <input type="checkbox" id="VisibleOnDashboard" name="VisibleOnDashboard" />
             Show on Dashboard
         </section>
+        <section>
+            <div class="col-lg-6">
+                <div id="colorpicker"></div>
+            </div>
 
+            <div class="col-lg-6">
+                <label asp-for="Color" class="label"></label>
+                <div class="form-item input-group">
+                    <input asp-for="Color" type="text" required="required" class="custom-scroll form-control" id="Color" onchange="$(this).parent().find('.has-error').remove();" />
+                    <span class="has-error" id="invalid_color">Please Select Color</span>
+                    <div class="swatch input-group-addon">
+                        <input type="text" id="colorDiv" name="Color" value="#123456" disabled />
+                    </div>
+                </div>
+            </div>
+        </section>
         <input type="hidden" asp-for="DepartmentId" />
         <footer class="text-center form-submit">
             <button type="button" class="btn btn-danger form-submit-btn edit_department_btn">Submit</button>
@@ -46,10 +63,18 @@
         var isChecked = $("input[type='hidden'][id='hdnVisibleOnDashboard']").val();
         if (isChecked != "")
             $("[id='VisibleOnDashboard']").prop("checked", true);
-        
+
         $("[id='VisibleOnDashboard']").on("click", function () {
-             $(this).val() == false ? $(this).val("false") : $(this).val("true");
+            $(this).val() == false ? $(this).val("false") : $(this).val("true");
         })
     });
-    
+
+</script>
+
+<script type="text/javascript" charset="utf-8">
+    $('#colorpicker').farbtastic(function (color) {
+
+        $('#Color').val(color);
+        $('#colorDiv').css('background-color', color);
+    });
 </script>

@@ -15,5 +15,6 @@ namespace NationalNeon.Domain.Admin.Employee
         public EmployeeType EmployeeType { get; set; }
         public DateTime UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
+        public int DepartmentId { get; set; }
     }
 }

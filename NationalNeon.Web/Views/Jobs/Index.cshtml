@@ -57,7 +57,7 @@
         });
         applyDatePicker();
         $('#divAddPopup').delegate('.btn_addUpdateJobs', 'click', function () {
-
+            
             let isValid = true;
             var formValue = $("#addUpdateJobForm").serialize();
             if (formValue !== undefined) {
@@ -74,6 +74,12 @@
                     $("#invalid_target_completion_date").show();
                     isValid = false;
                 }
+
+                if ($('select[name="status"]').val() == '' || $('select[name="status"]').val() == undefined) {
+                    $("#invalid_status").show();
+                    isValid = false;
+                }
+
                 //if ($('input[name="revenue"]').val() == '' || $('input[name="revenue"]').val() == undefined) {
                 //    $("#invalid_revenue").show();
                 //    isValid = false;
@@ -87,6 +93,7 @@
             if (isValid) {
                 $('#divAddPopup [id^="invalid_"]').hide();
                 if (setJobDates()) {
+                    
                     formValue = $("#addUpdateJobForm").serialize();
                     saveOrUpdate(formValue);
                 }
@@ -330,7 +337,7 @@
             var scheduledDateyear = scheduledDateParameters[2];
             $("#scheduled_date").val(scheduledDateyear + "-" + scheduledDatemonth + "-" + scheduledDateday);
             $("#scheduled_date").attr('value', scheduledDateyear + "-" + scheduledDatemonth + "-" + scheduledDateday);
-           // isValid = true;
+            // isValid = true;
         }
         //else {
         //    isValid = false;
@@ -357,8 +364,8 @@
             autoclose: true,
             //dateFormat: 'yyyy-mm-dd'
             dateFormat: 'mm/dd/yy'
-            
-         }).on("change", function () {
+
+        }).on("change", function () {
             $(this).attr('value', this.value);
         });
     }

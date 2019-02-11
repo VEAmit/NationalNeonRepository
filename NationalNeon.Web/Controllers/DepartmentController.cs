@@ -75,7 +75,7 @@ namespace NationalNeon.Web.Controllers
             {
                 data = (from task in db.Tasks
                         join dept in db.Departments on task.departmentId equals dept.departmentId
-                        where dept.departmentId == Id && task.Completed == 0
+                        where dept.departmentId == Id /*&& task.Completed == 0*/
                         group task by task.Department.departmentname into g
                         select new TaskDepartmentViewModel
                         {
