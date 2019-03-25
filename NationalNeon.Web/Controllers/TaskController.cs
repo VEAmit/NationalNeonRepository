@@ -176,7 +176,7 @@ namespace NationalNeon.Web.Controllers
             });
             //return RedirectToAction("TaskList");
         }
-        public ActionResult DownloadViewPDF()
+        public IActionResult DownloadViewPDF()
         {
             //var model = new GeneratePDFModel();
             // var model = new TaskViewModel();
@@ -198,7 +198,56 @@ namespace NationalNeon.Web.Controllers
                                     description = job.description
                                 }).ToList();
             //Code to get content
-            return new ViewAsPdf("TaskPdf", taskDeptList) { FileName = "export_work_order_National Neon _ Work Order " + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf" };
+            return new ViewAsPdf("TaskPdf", taskDeptList)
+            { FileName = "export_work_order_National Neon _ Work Order " + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf" };
+        }
+
+        public IActionResult generateIndividualTask(int id)
+        {
+            var taskDeptList = (from task in db.Tasks
+                                join dept in db.Departments on task.departmentId equals dept.departmentId
+                                join job in db.Jobs on task.jobId equals job.jobId
+                                select new TaskDepartmentViewModel
+                                {
+                                    jobId = job.jobId,
+                                    job_name = job.job_name,
+                                    TaskId = task.TaskId,
+                                    TaskName = task.TaskName,
+                                    BudgetedHours = task.BudgetedHours,
+                                    targetdate = task.TargetCompletionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                                    Status = task.Status,
+                                    Employee = task.Employee,
+                                    departmentname = dept.departmentname,
+                                    Completed = task.Completed,
+                                    description = job.description
+                                }).Where(a =>a.TaskId == id).ToList();
+            //Code to get content
+            return new ViewAsPdf("TaskPdf", taskDeptList)
+            { FileName = "export_work_order_National Neon _ Work Order " + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf" };
+        }
+
+        public IActionResult generateAllTask(int id)
+        {
+            var taskDeptList = (from task in db.Tasks
+                                join dept in db.Departments on task.departmentId equals dept.departmentId
+                                join job in db.Jobs on task.jobId equals job.jobId
+                                select new TaskDepartmentViewModel
+                                {
+                                    jobId = job.jobId,
+                                    job_name = job.job_name,
+                                    TaskId = task.TaskId,
+                                    TaskName = task.TaskName,
+                                    BudgetedHours = task.BudgetedHours,
+                                    targetdate = task.TargetCompletionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                                    Status = task.Status,
+                                    Employee = task.Employee,
+                                    departmentname = dept.departmentname,
+                                    Completed = task.Completed,
+                                    description = job.description
+                                }).Where(a => a.jobId == id).ToList();
+            //Code to get content
+            return new ViewAsPdf("TaskPdf", taskDeptList)
+            { FileName = "export_work_order_National Neon _ Work Order " + DateTime.Now.ToString("dd-MM-yyyy") + ".pdf" };
         }
         public IActionResult UpdateTaskTargetDate(int taskId, DateTime targetCompletionDate)
         {

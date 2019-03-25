@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Hosting;
 using System.Net.Http.Headers;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using NationalNeon.Utility.Enums;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace NationalNeon.Web.Controllers
 {
@@ -20,12 +22,14 @@ namespace NationalNeon.Web.Controllers
     {
         private readonly IJobBusiness ijobBusiness;
         private readonly ITaskBusiness itaskBusiness;
+        private readonly IEmployeeBusiness iEmployeeBusiness;
         private readonly IHostingEnvironment ihostingEnv;
-        public JobsController(IJobBusiness ijobBusiness, IHostingEnvironment ihostingEnv, ITaskBusiness itaskBusiness)
+        public JobsController(IJobBusiness ijobBusiness, IHostingEnvironment ihostingEnv, ITaskBusiness itaskBusiness, IEmployeeBusiness iEmployeeBusiness)
         {
             this.ijobBusiness = ijobBusiness;
             this.ihostingEnv = ihostingEnv;
             this.itaskBusiness = itaskBusiness;
+            this.iEmployeeBusiness = iEmployeeBusiness;
         }
         [Route("Job")]
         public IActionResult Index()
@@ -36,7 +40,16 @@ namespace NationalNeon.Web.Controllers
         [HttpGet]
         public ActionResult AddJobs()
         {
+            //EmployeeType employeeType = EmployeeType.Sales;
+            //var empTypeList = EnumHelper<EmployeeType>.GetValues(employeeType).Select(item => new { Id = (int)item, Name = item.ToString() }).ToList();
+
+            var usersList = iEmployeeBusiness.GetAllEmployeeBySales();
+            ViewBag.EmployeeType = new SelectList(usersList, "EmployeeId", "FirstName");
+
+
+            //ViewBag.EmployeeType = new SelectList(empTypeList, "Id", "Name");
             return PartialView("_AddJobs");
+
         }
         public ActionResult JobsList()
         {
@@ -105,6 +118,7 @@ namespace NationalNeon.Web.Controllers
                     datamodal.job_number = jobModel.job_number;
                     datamodal.revenue = jobModel.revenue;
                     datamodal.description = jobModel.description;
+                    datamodal.special_Notes = jobModel.special_Notes;
                     datamodal.sales_person = jobModel.sales_person;
                     datamodal.scheduled_date = jobModel.scheduled_date;
                     datamodal.status = jobModel.status;
@@ -237,7 +251,9 @@ namespace NationalNeon.Web.Controllers
         {
             
             var model = ijobBusiness.GetJob(jobId);
-           
+            var usersList = iEmployeeBusiness.GetAllEmployeeBySales();
+            ViewBag.EmployeeType = new SelectList(usersList, "FirstName", "FirstName");
+
             if (model.Tasks.Count>0)
             {
                 var completedTaskTotalHours = model.Tasks.Where(row => row.Completed == 1).Sum(row => Convert.ToDecimal(row.BudgetedHours));

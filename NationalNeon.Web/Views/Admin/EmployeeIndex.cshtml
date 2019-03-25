@@ -4,16 +4,19 @@
     <!-- row -->
     <div class="row">
 
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 form-group">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 noprint form-group">
             <button onclick="window.history.back();" class="btn btn-danger"><i class="fa fa-chevron-left"></i> Back</button>
             <button id="refreshEmployee" class="btn btn-danger export-data"><i class="fa fa-repeat"></i> Refresh</button>
             <button class="btn btn-danger pull-right" data-toggle="modal" data-target="#myModal" id="newEmployee">New Employee</button>
             <button id="print" onclick="window.print()" class="btn btn-danger export-data pull-right"><i class="fa fa-print"></i> Print</button>
-            <div class="modal fade" id="myModal" role="dialog">
-                <div class="modal-dialog" id="divAddPopup">
-
+            <div class="modal fade noprint" id="myModal" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-body" id="divAddPopup">
+                        <!-- Modal content-->
+                    </div>
                 </div>
             </div>
+        </div>
         </div>
         <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <!-- Widget ID (each widget will need unique ID)-->
@@ -42,7 +45,7 @@
             </div>
             <!-- end widget -->
         </article>
-    </div>
+    
 
 </section>
 <!-- end widget grid -->
@@ -66,7 +69,6 @@
         empId = employeeId;
     }
     function getEmployee(employeeId) {
-      
         $.ajax({
             type: 'POST',
             url: '/Admin/GetEmployee?employeeId=' + employeeId + '',
@@ -79,16 +81,48 @@
             }
         });
     }
-    function deleteEmployee(employeeId) {
+
+    function deleteEmployee(jobId) {
+        //$.noConflict();
         $.ajax({
             type: 'POST',
-            url: '/Admin/DeleteEmployee?employeeId=' + employeeId + '',
-            async: false,
+            url: '/Admin/DeleteEmployee?employeeId=' + empId + '',
+            //success: function () {
+            //    jobList();
+            //}
             success: function (result) {
-               
+                if (result.success) {
+                    $('.close').click();
+                    $.notify({
+                        title: "<strong>Deleted:</strong> ",
+                        message: "Employee Deleted Succesfully",
+                    },
+                        {
+                            type: 'danger',
+                            allow_dismiss: false,
+                            showProgressbar: true,
+                            delay: '100',
+                            newest_on_top: true,
+                        });
+                }
+                setTimeout(() => {
+                    window.location.reload();
+                    //window.location.href = "/Department";
+                    //taskList();
+                }, 2000);
             }
         });
     }
+    //function deleteEmployee() {
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: '/Admin/DeleteEmployee?employeeId=' + empId + '',
+    //        async: false,
+    //        success: function (result) {
+    //            window.location.reload();
+    //        }
+    //    });
+    //}
     function employeeList() {
         $.ajax({
             url: "/Admin/GetEmployeeList",
@@ -133,11 +167,11 @@
 
                     $('.close').click();
                     $.notify({
-                        title: "<strong>Success:</strong> ",
-                        message: "Employee successfully added.",
+                        title: result.title,
+                        message: result.message,
                     },
                         {
-                            type: 'success',
+                            type: result.type,
                             allow_dismiss: false,
                             showProgressbar: true,
                             delay: '100',

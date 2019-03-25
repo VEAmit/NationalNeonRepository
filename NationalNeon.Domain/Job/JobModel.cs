@@ -14,6 +14,9 @@ namespace NationalNeon.Domain.Job
         public int job_number { get; set; }
         public string job_name { get; set; }
         public string description { get; set; }
+        public string special_Notes { get; set; }
+
+        public int EmployeeId { get; set; }
         //[DataType(DataType.Date)]
         public DateTime target_completion_date { get; set; }
         public string status { get; set; }

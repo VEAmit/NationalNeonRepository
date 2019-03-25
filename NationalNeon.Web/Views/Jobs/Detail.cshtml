@@ -7,9 +7,18 @@
         @*<button class="btn btn-danger pull-right" data-toggle="modal" data-target="#myJobDetailTaskModal" id="btnAddTask">New Task</button>*@
 
     </div>
-    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
-        <button id="edit" onClick="showJobDetails(@Model.jobId)" data-toggle="modal" data-target="#myModal" aria-hidden="true" class="btn btn-danger"><i class="fa fa-edit"></i> Edit</button>
-  
+    <div id="editChangesdiv" class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right">
+        @*<button id="edit" onClick="showJobDetails(@Model.jobId)" data-toggle="modal" data-target="#myModal" aria-hidden="true" class="btn btn-danger">*@
+        <button id="edit" onClick="showJobDetails(@Model.jobId)" aria-hidden="true" class="btn btn-danger">
+            <i class="fa fa-edit"></i> Edit
+        </button>
+    </div>
+    <div id="saveChangesdiv" class="col-xs-12 col-sm-6 col-md-6 col-lg-6 text-right hidden">
+        <button id="edit" aria-hidden="true" onClick="saveChanges()" class="btn btn-success">
+            @*saveOrUpdateJob*@
+            <i class="fa fa-save"></i> Save
+        </button>
+
     </div>
     <div class="modal fade noprint" id="myModal" role="dialog">
         <div class="modal-dialog">
@@ -21,114 +30,148 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Job # :</label>
-        <label class="col-xs-7">@Model.job_number</label>
-        <input type="hidden" value="@Model.jobId" id="hdnJobId" />
-    </div>
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Job Description:</label>
-        <label class="col-xs-7">@Model.description</label>
+<form asp-action="AddJobs" asp-controller="Jobs" id="addUpdateJobForm11">
 
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Job Name:</label>
-        <label class="col-xs-7">@Model.job_name</label>
-
-    </div>
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Target Completion Date:</label>
-        @{
-            var targetDate = "";
-            if (Model.target_completion_date.ToString("MM/dd/yyyy") != "01-01-0001")
-            {
-                targetDate = Model.target_completion_date.ToString("D");
-            }
-            else
-            {
-                targetDate = "Date not set";
-            }
-            <label class="col-xs-7">@targetDate</label>
-        }
-
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Revenue:</label>
-        <label class="col-xs-7">@Model.revenue</label>
-    </div>
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Scheduled Installation Date:</label>
-        @{
-            var scheduledDate = "";
-            if (Model.scheduled_date.ToString("MM/dd/yyyy") != "01-01-0001")
-            {
-                scheduledDate = Model.scheduled_date.ToString("D");
-            }
-            else
-            {
-                scheduledDate = "Date not set";
-            }
-
-            <label class="col-xs-7">@scheduledDate</label>
-        }
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Progress:</label>
-        <div class="progress col-xs-7">
-            <div class="progress-bar" role="progressbar"
-                 aria-valuemin="0" aria-valuemax="100" style="width:@ViewBag.progress">
-                @ViewBag.progress
+    <div class="row">
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Job # :</label>
+            @*<label class="col-xs-7">@Model.job_number</label>*@
+            <div class="col-xs-7">
+                @*<input asp-for="job_number" value="@Model.job_number" name="job_number" class="form-control" />*@
+                <input type="number" value="@Model.job_number" name="job_number" class="form-control" />
+                <input type="hidden" value="@Model.jobId" name="jobId" id="hdnJobId" />
+            </div>
+        </div>
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Job Description :</label>
+            @*<label class="col-xs-7">@Model.description</label>*@
+            <div class="col-xs-7">
+                <input type="text" value="@Model.description" name="description" class="form-control" />
             </div>
         </div>
     </div>
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Sales Person:</label>
-        <label class="col-xs-7">@Model.sales_person</label>
-    </div>
-</div>
-<div class="row">
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Project Documents:</label>
-        @{
-            if (Model.JobFileUpload != null)
-            {
+    <div class="row">
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Job Name :</label>
+            @*<label class="col-xs-7">@Model.job_name</label>*@
+            <div class="col-xs-7">
+                <input type="text" value="@Model.job_name" name="job_name" class="form-control" />
+            </div>
+        </div>
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Target Completion Date :</label>
+            @{
+                var targetDate = "";
+                if (Model.target_completion_date.ToString("MM/dd/yyyy") != "01-01-0001")
+                {
+                    targetDate = Model.target_completion_date.ToString("D");
+                }
+                else
+                {
+                    targetDate = "Date not set";
+                }
+                @*<label class="col-xs-7">@targetDate</label>*@
                 <div class="col-xs-7">
-                    <ul id="fileUploadDetailList">
-                        @{
-                            foreach (var fileUpload in Model.JobFileUpload)
-                            {
-                                var filename = (fileUpload.FilePath.Split('\\')[2]).Split('_')[0];
-                                <li>
-                                    <a href="@fileUpload.FilePath" target="_blank">@filename</a>
-                                    <button type="button" class="closebtn" data-toggle="modal" data-target="#fileDeleteDialog" onclick="setJobFileDeleteId(@fileUpload.JobFileUploadId)">x</button>
-                                </li>
-                            }
-                        }
-                    </ul>
-                    <button data-toggle="modal" data-target="#uploadJobDetailFile" onclick="UploadFileJobs(@Model.jobId)">
-                        <i class="fa fa-upload" aria-hidden="true">Upload New</i>
-                    </button>
+                    <input type="text" value="@Model.target_completion_date.ToString("D")" name="target_completion_date" class="form-control dateCalenderClose" data-provide="datepicker" autocomplete="off" onkeypress="return false;" />
+                    @*<input type="text" asp-for="@targetDate" autocomplete="off" data-provide="datepicker" onkeypress="return false;" class="form-control dateCalender" placeholder="click to choose a completion date" required onchange="$(this).parent().find('.has-error').hide();" />*@
                 </div>
             }
-            else
-            {
-                <label class="col-xs-5"></label>
-            }
-        }
 
+        </div>
     </div>
-    <div class="col-xs-4">
-        <label class="col-xs-5" style="font-weight:600">Status</label>
-        <label class="col-xs-7">@Model.status</label>
+    <div class="row">
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Revenue :</label>
+            @*<label class="col-xs-7">@Model.revenue</label>*@
+            <div class="col-xs-7">
+                <input type="number" value="@Model.revenue" name="revenue" class="form-control" />
+            </div>
+        </div>
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Installation Date :</label>
+            @{
+                var scheduledDate = "";
+                if (Model.scheduled_date.ToString("MM/dd/yyyy") == "01-01-0001" || Model.scheduled_date.ToString("MM/dd/yyyy") == "01/01/0001")
+                {
+                    //scheduledDate = Model.scheduled_date.ToString("D");
+                    scheduledDate = "Not Scheduled";
+                }
+                else
+                {
+                    scheduledDate = Model.scheduled_date.ToString("D");
+                }
+
+                @*<label class="col-xs-7">@scheduledDate</label>*@
+                <div class="col-xs-7">
+                    <input type="text" value="@scheduledDate" name="scheduled_date" class="form-control dateCalenderClose" data-provide="datepicker" autocomplete="off" onkeypress="return false;" />
+                    @*<input type="text" asp-for="@Model.scheduled_date" name="scheduledDate" autocomplete="off" data-provide="datepicker" onkeypress="return false;" class="form-control dateCalender" placeholder="click to choose a scheduled date" required onchange="$(this).parent().find('.has-error').hide();" />*@
+                </div>
+            }
+        </div>
     </div>
-</div>
+    <div class="row">
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Progress :</label>
+            <div class="col-xs-7">
+                <div class="progress" style="margin-bottom: 0px; height: 30px;">
+                    <div class="progress-bar" role="progressbar"
+                         aria-valuemin="0" aria-valuemax="100" style="width:@ViewBag.progress">
+                        @ViewBag.progress
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Sales Person :</label>
+            @*<label class="col-xs-7">@Model.sales_person</label>*@
+            <div class="col-xs-7">
+                @*<input type="text" value="@Model.sales_person" name="sales_person" class="form-control" />*@
+
+                @Html.DropDownListFor(m => m.sales_person, (SelectList)ViewBag.EmployeeType, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        @*<div class="col-xs-5 form-group">
+                <label class="col-xs-5" style="font-weight:600">Project Documents:</label>
+                @{
+                    if (Model.JobFileUpload != null)
+                    {
+                        <div class="col-xs-7">
+                            <ul id="fileUploadDetailList">
+                                @{
+                                    foreach (var fileUpload in Model.JobFileUpload)
+                                    {
+                                        var filename = (fileUpload.FilePath.Split('\\')[2]).Split('_')[0];
+                                        <li>
+                                            <a href="@fileUpload.FilePath" target="_blank">@filename</a>
+                                            <button type="button" class="closebtn" data-toggle="modal" data-target="#fileDeleteDialog" onclick="setJobFileDeleteId(@fileUpload.JobFileUploadId)">x</button>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                            <button data-toggle="modal" data-target="#uploadJobDetailFile" class="form-control" onclick="UploadFileJobs(@Model.jobId)">
+                                <i class="fa fa-upload" aria-hidden="true">Upload New</i>
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <label class="col-xs-5"></label>
+                    }
+                }
+
+            </div>*@
+        <div class="col-xs-5 form-group">
+            <label class="col-xs-5" style="font-weight:600">Status :</label>
+            @*<label class="col-xs-7">@Model.status</label>*@
+            <div class="col-xs-7">
+                @*<input type="text" value="@Model.status" name="status" class="form-control" />*@
+                @Html.DropDownListFor(m => m.status, new List<SelectListItem> { new SelectListItem { Text = "Pre-Production", Value = "Pre-Production" }, new SelectListItem { Text = "Production", Value = "Production" }, new SelectListItem { Text = "Complete", Value = "Complete" } }, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+            </div>
+        </div>
+    </div>
+</form>
 <div>
     @*Project Documents:*@
     <form asp-controller="Jobs" asp-action="UploadFiles" asp-antiforgery="false"
@@ -150,7 +193,7 @@
                         <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false" data-widget-deletebutton="false">
                             <header><span class="widget-icon"> <i class="fa fa-briefcase"></i> </span><h2>Tasks</h2> </header>
                             @*<header><span class="widget-icon"> <i class="fa fa-briefcase"></i> </span><h2>Tasks</h2></header>*@
-                            
+
                             <div>
                                 <div class="jarviswidget-editbox">
 
@@ -186,19 +229,24 @@
                                                                     if (task.Completed == 1)
                                                                     {
                                                                         <td>
-                                                                           <span>Yes</span>
+                                                                            <span>Yes</span>
 
                                                                         </td>
                                                                     }
                                                                     else
                                                                     {
                                                                         <td>
-                                                                            <input type="checkbox" id='@("chk"+task.TaskId)' value="@task.TaskId" onchange="confirmTaskCompletion(@task.TaskId,event)" />
+                                                                            <input type="checkbox" class="checkboxEnabled" id='@("chk"+task.TaskId)' value="@task.TaskId" onchange="confirmTaskCompletion(@task.TaskId,event)" />
+
                                                                             <button id="btnTaskComplete" style="display:none" data-target="#taskCompleteDialog" data-toggle="modal"></button>
                                                                         </td>
                                                                     }
                                                                 }
-                                                                        <td>  <button id="print" onclick="printIndividualTask(@Model.Tasks.Count,@sno)" class="btn btn-danger export-data "><i class="fa fa-print"></i> Print</button></td>
+                                                                @*<td>  <button id="print" onclick="printIndividualTask(@Model.Tasks.Count,@sno)" class="btn btn-danger export-data "><i class="fa fa-print"></i> Print</button></td>*@
+                                                                <td>
+                                                                    @*<button id="print" onclick="generateIndividualTask(@task.TaskId)" class="btn btn-danger export-data "><i class="fa fa-print"></i> Print</button>*@
+                                                                    <a href="@Url.Action("generateIndividualTask","Task", new { id = @task.TaskId })" class="btn btn-danger export-data" style="display: inline-block; margin-left: 10px;">Print</a>
+                                                                </td>
                                                             </tr>
                                                         }
                                                     }
@@ -281,7 +329,11 @@
 
 <script type="text/javascript">
     var jobId = 0, fileIds = [], loadData = false;
-    $(document).ready(function () {
+        $(document).ready(function () {
+        /* Disabled all control on detail page */
+            $("input,select").attr('disabled', 'disabled');
+            $('.checkboxEnabled').removeAttr('disabled');
+
         $("#refreshTask").click(function () {
             history.go(0);
         });
@@ -300,7 +352,8 @@
                 $("select#jobId").val(jobid);
                 $("select#jobId").prop("disabled", true);
             }
-        });
+            });
+
         $("#jobFile").on("change", function () {
 
             if (validateJobDetailFile()) {
@@ -309,9 +362,9 @@
             else {
                 $("#invalid_JobDetailFileLength").show();
             }
-        });
-        $(".btn_addUpdateTask").on('click', function () {
+            });
 
+            $(".btn_addUpdateTask").on('click', function () {
             let isValid = true;
             var curEvent = $(this);
             var formValue = $("#addUpdateForm").serialize();
@@ -354,7 +407,8 @@
                     saveOrUpdate(formValue);
                 }
             }
-        });
+            });
+
         Dropzone.autoDiscover = false;
 
         jobid = getParameterByName("jobId");
@@ -436,8 +490,12 @@
     $(window).load(function () {
         $('#addUpdateForm').find("input, textarea, select#departmentId,select#userId, number").val("");
         $("div.taskList").find("input[type='search']").closest('label').append('<button class="btn btn-danger pull-left" data-toggle="modal" data-target="#myJobDetailTaskModal" id="btnAddTask" style="margin-left: 20px">New Task</button>');
-        $("div.taskList").find("input[type='search']").closest('label').append('<button id="print" onclick="printTasks()" class="btn btn-danger pull-right" style="margin-left: 50px"><i class="fa fa-print"></i> Print</button>');
+        $("div.taskList").find("input[type='search']").closest('label').append('  <a href="@Url.Action("generateAllTask", "Task", new { id = @Model.jobId })" class="btn btn-danger export-data" style="display: inline-block; margin-left: 10px;">Print All Work Order</a>');
+
     })
+    @*<td><a href="@Url.Action("generateAllTask", "Task", new { id = @Model.jobId })" class="btn btn-danger export-data"> Print </a> </td>*@
+
+
     function confirmTaskCompletion(taskId, event) {
         var isChecked = $(event.target).is(':checked');
         if (isChecked) {
@@ -550,12 +608,9 @@
                 $("#invalid_JobDetailFileLength").show();
             }
 
-        } else {
-
-        }
+        } else { }
     }
-    function saveOrUpdate(formValue) {
-
+        function saveOrUpdate(formValue) {
         $.ajax({
             type: 'POST',
             url: "/Task/AddTask",
@@ -582,7 +637,7 @@
             }
         });
     }
-    function setJobDates() {
+        function setJobDates() {
         var targetCompleteDate = $("#TargetCompletionDate").val();
         if (targetCompleteDate != null && targetCompleteDate != undefined && targetCompleteDate != "") {
             var dateParameters = targetCompleteDate.split('/');
@@ -633,7 +688,6 @@
         });
         applyDatePicker();
         $('#divAddPopup').delegate('.btn_addUpdateJobs', 'click', function () {
-            debugger;
             let isValid = true;
             var formValue = $("#addUpdateJobForm").serialize();
             if (formValue !== undefined) {
@@ -668,10 +722,9 @@
 
             if (isValid) {
                 $('#divAddPopup [id^="invalid_"]').hide();
-                if (setJobDates()) {
-                    debugger;
+                if (saveOrUpdateJob()) {
                     formValue = $("#addUpdateJobForm").serialize();
-                    saveOrUpdate(formValue);
+                    saveOrUpdateJob(formValue);
                 }
             }
         });
@@ -706,7 +759,7 @@
         });
     }
 
-    function saveOrUpdate(formValue) {
+    function saveOrUpdateJob(formValue) {
         //$.noConflict();
         $.ajax({
             type: 'POST',
@@ -871,9 +924,7 @@
                 $("#invalid_JobFileLength").show();
             }
 
-        } else {
-
-        }
+        } else { }
 
     }
 
@@ -890,8 +941,7 @@
     $("#refreshJobs").click(function () {
         history.go(0);
     });
-    function setJobDates() {
-
+    function setJobDatesForm() {
         var targetCompleteDate = $("#target_completion_date").val();
         var scheduledDate = $("#scheduled_date").val();
         var isValid = false;
@@ -915,7 +965,7 @@
             $("#scheduled_date").attr('value', scheduledDateyear + "-" + scheduledDatemonth + "-" + scheduledDateday);
             // isValid = true;
         }
-       
+
         return isValid;
     }
     function applyDatePicker() {
@@ -943,11 +993,11 @@
     function printIndividualTask(rowCount, currentRow) {
         var divToPrint = document.getElementById("dt_basic");
         newWin = window.open("");
-       
-        for (var i = 2; i < rowCount+1; i++) {
+
+        for (var i = 2; i < rowCount + 1; i++) {
 
             if (i != currentRow - 1) {
-                newWin.document.write("<style> tr:nth-child("+ i +"){display:none;} </style>");
+                newWin.document.write("<style> tr:nth-child(" + i + "){display:none;} </style>");
             }
         }
         if (currentRow != 2) {
@@ -965,6 +1015,15 @@
         newWin.print();
         newWin.close();
     }
+
+
+        //function generateAllTask(jobId) {
+        //    debugger;
+        //    $.ajax({
+        //        type: 'POST',
+        //        url: '/Task/generateAllTask?id=' + jobId + '',
+        //    });
+        //}
 </script>
 
 

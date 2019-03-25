@@ -57,7 +57,7 @@
             $(this).css("cursor", "pointer");
         }).on("click", function (event) {
             userId = $(this).find("td:last input[type='hidden']").val();
-            if (userId != "") {
+            if (userId !== "") {
                 location.href = "/UserDetails?userId=" + userId;
             }
         });

@@ -37,6 +37,14 @@ namespace NationalNeon.Business.Concrete
             return model;
         }
 
+        public List<EmployeeModel> GetAllEmployeeBySales()
+        {
+            var model = new List<EmployeeModel>();
+            var data = employeeRepository.GetAll().Where(a=> a.EmployeeType == 0);
+            Mapper.Map(data, model);
+            return model;
+        }
+
         public EmployeeModel GetById(int employeeId)
         {
             var model = new EmployeeModel();

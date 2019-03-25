@@ -379,6 +379,10 @@
     <Compile Include="Migrations\20190125094737_employetablechangese.designer.cs">
       <DependentUpon>20190125094737_employetablechangese.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20190214122040_specialNotes.cs" />
+    <Compile Include="Migrations\20190214122040_specialNotes.designer.cs">
+      <DependentUpon>20190214122040_specialNotes.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskRepository.cs" />

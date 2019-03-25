@@ -24,7 +24,7 @@
                                 <th>Target Completion Date</th>
                                 <th>Status</th>
                                 <th>Revenue</th>
-                                <td>Progress</td>
+                                <th>Progress</th>
                                 <th>Scheduled Installation Date</th>
                                 <th>Sales Person</th>
                                 @*<th>Documents</th>*@
@@ -179,6 +179,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+        
         $(".jobsList tbody tr").on("mouseover", function () {
             $(this).css("cursor", "pointer");
         }).on("click", function (event) {

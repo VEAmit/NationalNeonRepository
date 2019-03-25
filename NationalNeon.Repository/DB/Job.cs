@@ -18,6 +18,8 @@ namespace NationalNeon.Repository.DB
         public string status { get; set; }
         public DateTime scheduled_date { get; set; }
         public string sales_person { get; set; }
+
+        public string special_Notes { get; set; }
         public Decimal revenue { get; set; }
         public string created_by { get; set; }
         public DateTime created_on { get; set; }

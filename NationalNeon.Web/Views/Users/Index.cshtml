@@ -93,16 +93,16 @@
         let isValid = true;
         var form = $('#addNewUserForm').serialize();
         if (form !== undefined) {
-            if ($('input[name="username"]').val() == '' || $('input[name="username"]').val() == undefined) {
+            if ($('input[name="username"]').val() === '' || $('input[name="username"]').val() === undefined) {
                 $("#invalid_username").show();
                 isValid = false;               
             }
-            if ($('input[name="password"]').val() == '' || $('input[name="password"]').val() == undefined) {
+            if ($('input[name="password"]').val() === '' || $('input[name="password"]').val() === undefined) {
                 $("#invalid_password").show();
                 isValid = false; 
                
             }
-            if ($('select[name="role"]').val() == '' || $('select[name="role"]').val() == undefined) {
+            if ($('select[name="role"]').val() === '' || $('select[name="role"]').val() === undefined) {
                 $("#invalid_role").show();
                 isValid = false;
                 return;
@@ -127,7 +127,7 @@
                             allow_dismiss: false,
                             showProgressbar: true,
                             delay: '100',
-                            newest_on_top: true,
+                            newest_on_top: true
                         });
                 }
                 setTimeout(() => {

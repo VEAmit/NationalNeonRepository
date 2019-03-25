@@ -31,7 +31,11 @@
                 <textarea asp-for="description" autocomplete="off" class="form-control" />
             </div>
             <div class="form-group">
-                <label class="control-label">Target Completion Date</label>
+                <label class="control-label">Special Notes</label>
+                <textarea asp-for="special_Notes" autocomplete="off" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Target Production Completion Date</label>
                 <input type="text" asp-for="target_completion_date" autocomplete="off" data-provide="datepicker" onkeypress="return false;" class="form-control dateCalender" placeholder="click to choose a completion date" required onchange="$(this).parent().find('.has-error').hide();" />
                 <span class="has-error" id="invalid_target_completion_date">Please enter target completion date</span>
             </div>
@@ -42,7 +46,8 @@
                 <span class="has-error" id="invalid_status">Please select status</span>
             </div>
             <div class="form-group">
-                <label class="control-label">Scheduled Date</label>
+                @*<label class="control-label">Scheduled Date</label>*@
+                <label class="control-label">Installation Date</label>
                 <input type="text" asp-for="scheduled_date" autocomplete="off" data-provide="datepicker" onkeypress="return false;" class="form-control dateCalender" placeholder="click to choose a scheduled date" required onchange="$(this).parent().find('.has-error').hide();" />
                 <span class="has-error" id="invalid_scheduled_date">Please enter scheduled date</span>
 
@@ -52,10 +57,17 @@
                 <input asp-for="revenue" type="number" step="0.01" min="0" class="form-control" required onchange="$(this).parent().find('.has-error').hide();" />
                 <span class="has-error" id="invalid_revenue">Please enter revenue</span>
             </div>
+            @*<div class="form-group">
+            <label class="control-label">Sales Person</label>
+            <input asp-for="sales_person" autocomplete="off" class="form-control" />
+        </div>*@
+
             <div class="form-group">
                 <label class="control-label">Sales Person</label>
-                <input asp-for="sales_person" autocomplete="off" class="form-control" />
+                @Html.DropDownListFor(m => m.EmployeeId, (SelectList)ViewBag.EmployeeType, "---- Select ----", new { @class = "form-control", @onchange = "drp(this)" })
+                <span class="has-error" id="invalid_JobName">Please Select Sales Person</span>
             </div>
+            <input asp-for="sales_person" type="hidden" hidden class="form-control" required />
             <input asp-for="jobId" type="hidden" hidden class="form-control" required />
             <footer class="text-center form-submit">
                 <button type="button" class="btn btn-danger form-submit-btn btn_addUpdateJobs">Submit</button>
@@ -64,9 +76,18 @@
     </div>
 </div>
 <script>
-
+    //$("body").on("change", "#employeeid", function () {
+    //    debugger;
+    //    $("#hfFruitName").val($(this).find("option:selected").text());
+    //    if (obj.parentNode.children[2] !== undefined) {
+    //        obj.parentNode.children[2].remove();
+    //    }
+    //});
+    
     function drp(obj) {
-        if (obj.parentNode.children[2] != undefined) {
+        $("#sales_person").val($("#EmployeeId option:selected").text());
+        // alert($("#sales_person").val());
+        if (obj.parentNode.children[2] !== undefined) {
             obj.parentNode.children[2].remove();
         }
     }

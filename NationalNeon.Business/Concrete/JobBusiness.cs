@@ -15,11 +15,13 @@ namespace NationalNeon.Business.Concrete
     public class JobBusiness : IJobBusiness
     {
         private readonly JobRepositorty jobRepositorty;
+        private readonly EmployeeRepository _employeeRepositorty;
         private readonly JobFileUploadRepository jobFileUploadRepository;
         private readonly TaskRepository taskRepository;
         public JobBusiness(IUnitOfWork unit)
         {
             jobRepositorty = new JobRepositorty(unit);
+            _employeeRepositorty = new EmployeeRepository(unit);
             jobFileUploadRepository = new JobFileUploadRepository(unit);
             taskRepository = new TaskRepository(unit);
         }
@@ -97,8 +99,11 @@ namespace NationalNeon.Business.Concrete
         {
             JobModel jobModel = new JobModel();
             var job = jobRepositorty.GetAll(null, null, "JobFileUpload,Tasks").SingleOrDefault(u => u.jobId == id);
-            return Mapper.Map(job, jobModel);
+            var obj = _employeeRepositorty.GetAll().SingleOrDefault(x => x.FirstName == job.sales_person);
+            if (obj!= null)
+                jobModel.EmployeeId = obj.EmployeeId;
 
+            return Mapper.Map(job, jobModel);
         }
 
         public void UpdateJobModel(JobModel model)
@@ -111,6 +116,7 @@ namespace NationalNeon.Business.Concrete
                 data.revenue = model.revenue;
                 data.description = model.description;
                 data.sales_person = model.sales_person;
+                data.special_Notes = model.special_Notes;
                 data.updated_on = DateTime.Now;
                 data.target_completion_date = model.target_completion_date;
                 data.scheduled_date = model.scheduled_date;

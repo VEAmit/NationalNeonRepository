@@ -11,6 +11,7 @@ namespace NationalNeon.Business.Interfaces
     {
         EmployeeModel AddEmployee(EmployeeModel employee);
         List<EmployeeModel> GetAll();
+        List<EmployeeModel> GetAllEmployeeBySales();
 
         EmployeeModel GetById(int employeeId);
 

@@ -12,6 +12,8 @@ namespace NationalNeon.Web.ViewModels
         public int job_number { get; set; }
         public string job_name { get; set; }
         public string description { get; set; }
+
+        public string special_Notes { get; set; }
         //[DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         // [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         //[DataType(DataType.Date)]
@@ -21,6 +23,7 @@ namespace NationalNeon.Web.ViewModels
         //[DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime scheduled_date { get; set; }
         public string sales_person { get; set; }
+        public int EmployeeId { get; set; }
         public Decimal revenue { get; set; }
         public string created_by { get; set; }
         public DateTime created_on { get; set; }

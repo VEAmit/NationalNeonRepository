@@ -23,6 +23,7 @@ namespace NationalNeon.Web.Controllers
             this.idepartmentBusiness = idepartmentBusiness;
             this.employeeModel = employeeModel;
         }
+        [Route("Employee")]
         public IActionResult EmployeeIndex()
         {
             return View();
@@ -32,7 +33,7 @@ namespace NationalNeon.Web.Controllers
             List<EmployeeViewModel> employeeViewModel = new List<EmployeeViewModel>();
             var employeeList = iemployeeBusiness.GetAll();
             Mapper.Map(employeeList, employeeViewModel);
-            return PartialView("_EmployeeList", employeeViewModel);
+            return PartialView("_EmployeeList", employeeViewModel);           
         }
         public IActionResult SystemSetupIndex()
         {
@@ -52,13 +53,35 @@ namespace NationalNeon.Web.Controllers
         {
             Mapper.Map(employeeViewModel, employeeModel);
             if (employeeModel.EmployeeId > 0)
-                iemployeeBusiness.Update(employeeModel);
-            else
-                iemployeeBusiness.AddEmployee(employeeModel);
-            return Json(new
             {
-                success = true
-            });
+                iemployeeBusiness.Update(employeeModel);
+                return Json(new
+                {
+                    success = true,
+                    title = "<strong>Success:</strong>",
+                    type = "info",
+                    message = "Employee updated Succesfully",
+                    action = "edit"
+                });
+            }
+               
+            else
+            {
+                iemployeeBusiness.AddEmployee(employeeModel);
+                return Json(new
+                {                
+                    success = true,
+                    title = "<strong>Success:</strong>",
+                    type = "success",
+                    message = "Employee added Succesfully",
+                    action = "added"
+                });
+            }
+             
+            //return Json(new
+            //{
+            //    success = true
+            //});
 
         }
 
@@ -87,7 +110,5 @@ namespace NationalNeon.Web.Controllers
                 success = true
             });
         }
-
-
     }
 }
