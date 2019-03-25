@@ -52,7 +52,6 @@ namespace NationalNeon.Web
             
             app.UseStaticFiles();
             app.UseSession();
-            
 
             app.UseMvc(routes =>
             {
